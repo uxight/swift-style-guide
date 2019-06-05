@@ -14,12 +14,14 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 - [네이밍(Naming)](#naming)
   - Prose
 
-
-## 정확성(Correctness)<a name="correctness"/>
+<a name="correctness"/>
+## 정확성(Correctness)
 최대한 워닝이 나지 않도록 한다. 이 규칙은 많은 정보를 준다. 
 예) string literals 대신 #selector types을 사용하는 것 등
 
-## 네이밍(Naming)<a name="naming"/>
+<a name="naming"/>
+
+## 네이밍(Naming)
 읽기만 해도 유추가 가능할 정도로 설명적으로 네이밍 한다. 
 [API Design Guidelines](https://swift.org/documentation/api-design-guidelines/)의 Swift 네이밍 컨벤션을 사용한다.
 대략적이 요약 내용:

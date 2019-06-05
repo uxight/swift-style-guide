@@ -16,11 +16,22 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 
 
 ## 정확성(Correctness)<a name="correctness"/>
-정확성
+최대한 워닝이 나지 않도록 한다. 이 규칙은 많은 정보를 준다. 
+예) string literals 대신 #selector types을 사용하는 것 등
 
-<a name="naming"/>
-## 네이밍(Naming)
-네이밍
+## 네이밍(Naming)<a name="naming"/>
+읽기만 해도 유추가 가능할 정도로 설명적으로 네이밍 한다. 
+[API Design Guidelines](https://swift.org/documentation/api-design-guidelines/)의 Swift 네이밍 컨벤션을 사용한다.
+대략적이 요약 내용:
+- 사용하는 데 있어 명확해질 수 있게 노력한다
+- 간결하게 하는 것보다 명확하게 만드는 것이 훨씬 더 중요하다
+- 카멜(camel) 케이스를 사용한다 (not snake case)
+- using uppercase for types (and protocols), lowercase for everything else
+- including all needed words while omitting needless words
+- using names based on roles, not types
+- sometimes compensating for weak type information
+- striving for fluent usage
+- beginning factory methods with `make`
 
 ### Delegates
 When creating custom delegate methods, an unnamed first parameter should be the delegate source. (UIKit contains numerous examples of this.)

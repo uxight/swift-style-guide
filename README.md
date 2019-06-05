@@ -8,8 +8,20 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 ## 우선순위
 1. 애플의 iOS 공식 문서나 라이브러리 스타일을 최우선 순위로 한다.
 2. 그 외 [기준 문서](https://github.com/raywenderlich/swift-style-guide)를 따른다.
-3. 빼고 싶거나 추가할 부분은 편집해 본 문서에 반영한다.
+3. 빼고 싶거나 추가할 부분을 편집해 본 문서에 반영한다.
 
+## 목차
+- 정확성(Correctness)
+- [네이밍(Naming)](#naming)
+  - Prose
+
+<a name="correctness"/>
+## 정확성(Correctness)
+정확성
+
+<a name="naming"/>
+## 네이밍(Naming)
+네이밍
 
 ### Delegates
 When creating custom delegate methods, an unnamed first parameter should be the delegate source. (UIKit contains numerous examples of this.)

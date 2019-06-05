@@ -10,12 +10,12 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 3. 빼고 싶거나 추가할 부분을 편집해 본 문서에 반영한다.
 
 ## 목차
-- 정확성(Correctness)
+- [정확성(Correctness)](#correctness)
 - [네이밍(Naming)](#naming)
   - Prose
 
-<a name="correctness"/>
-## 정확성(Correctness)
+
+## 정확성(Correctness)<a name="correctness"/>
 정확성
 
 <a name="naming"/>

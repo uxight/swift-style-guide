@@ -15,6 +15,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   - Prose
 
 <a name="correctness"/>
+
 ## 정확성(Correctness)
 최대한 워닝이 나지 않도록 한다. 이 규칙은 많은 정보를 준다. 
 예) string literals 대신 #selector types을 사용하는 것 등

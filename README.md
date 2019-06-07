@@ -9,10 +9,54 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 2. 그 외 [기준 문서](https://github.com/raywenderlich/swift-style-guide)를 따른다.
 3. 빼고 싶거나 추가할 부분을 편집해 본 문서에 반영한다.
 
+
 ## 목차
 - [정확성(Correctness)](#correctness)
 - [네이밍(Naming)](#naming)
   - Prose
+  - Delegates
+  - Use Type Inferred Context
+  - Generics
+  - Class Prefixes
+  - Language
+- Code Organization
+  - Protocol Conformance
+  - Unused Code
+  - Minimal Imports
+- Spacing
+- Comments
+- Classes and Structures
+  - Use of Self
+  - Protocol Conformance
+  - Computed Properties
+  - Final
+- Function Declarations
+- Function Calls
+- Closure Expressions
+- Types
+  - Constants
+  - Static Methods and Variable Type Properties
+  - Optionals
+  - Lazy Initialization
+  - Type Inference
+  - Syntactic Sugar
+- Functions vs Methods
+- Memory Management
+  - Extending Lifetime
+- Access Control
+- Control Flow
+  - Ternary Operator
+- Golden Path
+  - Failing Guards
+- Semicolons
+- Parentheses
+- Multi-line String Literals
+- No Emoji
+- Organization and Bundle Identifier
+- Copyright Statement
+- Smiley Face
+- References
+
 
 <a name="correctness"/>
 
@@ -26,15 +70,51 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 읽기만 해도 유추가 가능할 정도로 설명적으로 네이밍 한다. 
 [API Design Guidelines](https://swift.org/documentation/api-design-guidelines/)의 Swift 네이밍 컨벤션을 사용한다.
 대략적이 요약 내용:
-- 사용하는 데 있어 명확해질 수 있게 노력한다
+- 사용할 때 명확하게 이해할 수 있게 작성한다
 - 간결하게 하는 것보다 명확하게 만드는 것이 훨씬 더 중요하다
-- 카멜(camel) 케이스를 사용한다 (not snake case)
-- using uppercase for types (and protocols), lowercase for everything else
-- including all needed words while omitting needless words
-- using names based on roles, not types
-- sometimes compensating for weak type information
-- striving for fluent usage
-- beginning factory methods with `make`
+- 카멜(camel) 케이스를 사용한다 (snake case 금지)
+- 타입(type)과 프로토콜(protocol)은 UpperCamelCase를 사용하고 나머지엔 lowerCamelCase를 쓴다
+  ``` swift
+  var utf8Bytes: [UTF8.CodeUnit]
+  ```
+- 불필요한(의미적으로 중복되는) 단어를 빼고 필요한 모든 단어들을 포함시킨다
+  ``` swift
+  public mutating func removeElement(_ member: Element) -> Element? ( X )
+  public mutating func remove(_ member: Element) -> Element?        ( O )
+  ```
+- 타입보단 역할에 기반해 네이밍한다.
+  ``` swift
+  var string = "Hello"    ( X )
+  var greeting = "Hello"  ( O )
+  ```
+- 타입에 대한 정보가 부족할 땐 인자 역할이 명확히 이해되게 수정한다.
+  ``` swift
+  // 특히 타입이 NSObject, Any, AnyObject 이거나 Int, String 같은 fundamental type 일 경우 사용 시 의도대로 전달되지 않을 수 있다.
+  func add(_ observer: NSObject, for keyPath: String)
+  grid.add(self, for: graphics) // 사용할 때 이해하기 애매하다
+  
+  // 해당 인자의 역할을 이해할 수 있게 파라미터 명을 추가해준다
+  func addObserver(_ observer: NSObject, forKeyPath path: String)
+  grid.addObserver(self, forKeyPath: graphics) // clear
+  ```
+- 언어적으로 잘 읽히고 쓰일 수 있게 작성하려 노력한다(striving for fluent usage)
+  ``` swift
+  x.insert(y, at: z)          ( O ) -> “x, insert y at z”
+  x.insert(y, position: z)    ( X ) 
+  
+  x.subViews(havingColor: y)  ( O ) -> “x's subviews having color y”
+  x.subViews(color: y)        ( X ) 
+  
+  x.capitalizingNouns()       ( O ) -> “x, capitalizing nouns”
+  x.nounCapitalize()          ( X ) 
+  ```
+- factory methods는 `make`로 시작한다 e.g. x.makeIterator()
+- naming methods for their side effects
+  - verb methods follow the -ed, -ing rule for the non-mutating version
+  - noun methods follow the formX rule for the mutating version
+  - boolean types should read like assertions
+  - protocols that describe what something is should read as nouns
+  - protocols that describe a capability should end in -able or -ible
 
 ### Delegates
 When creating custom delegate methods, an unnamed first parameter should be the delegate source. (UIKit contains numerous examples of this.)

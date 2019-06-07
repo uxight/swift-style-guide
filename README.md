@@ -131,21 +131,46 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 - 전문가나 초보자 모두에게 쉬운 용어를 사용한다
 - 웬만하면 약자를 쓰지 않는다
 - 기존에 쓰이는 용어를 그대로 쓰지 않고, 초보자를 위해 풀어쓰거나 쉬운 대체 용어를 쓰지 않는다
-- 자유 함수(free function)는 특별한 경우에만 사용한다
+- 소유자가 없는 함수(free function)는 특별한 경우에만 사용한다
   ``` swift
   min(x, y, z) // 명백히 주체가 없을 경우
   
-  print(x) // 일반적으로 제약이 없는 함수일 때
+  print(x) // 제약이 없는 제너릭 함수일 때
   
-  sin(x) // 함수 구문이 설정된 도메인 표기법의 일부일 때(When function syntax is part of the established domain notation)
+  sin(x) // 함수 구문이 일반적으로 사용되는 형태와 비슷할 때
   ```
-- casing acronyms and initialisms uniformly up or down
-- giving the same base name to methods that share the same meaning
-- avoiding overloads on return type
-- choosing good parameter names that serve as documentation
-- preferring to name the first parameter instead of including its name in the method name, except as mentioned under Delegates
-- labeling closure and tuple parameters
-- taking advantage of default parameters
+- 미국 영어에서 대문자 표시되는 약어 및 이니셜은 모두 대문자로 쓰거나 모두 소문자로 써야 한다.
+  ``` swift
+  var utf8Bytes: [UTF8.CodeUnit] // 첫 글자를 소문자로 써야한다면 모두 소문자로
+  var isRepresentableAsASCII = true
+  var userSMTPServer: SecureSMTPServer // userSmtpServer 처럼 첫 글자만 대문자로 쓰지 않음
+  ```
+- 동일한 성격의 함수는 동일한 함수명을 쓴다
+  ``` swift
+  extension Shape {
+    /// Returns `true` iff `other` is within the area of `self`.
+    func contains(_ other: Point) -> Bool { ... }
+
+    /// Returns `true` iff `other` is entirely within the area of `self`.
+    func contains(_ other: Shape) -> Bool { ... }
+  }  
+  ```
+- return 타입을 오버로드 하지 않는다
+- 설명적인 역할을 할 수 있도록, 사용 시 노출되지 않는 파라미터명일지라도 잘 작성한다
+  ``` swift
+  /// Replace the given `subRange` of elements with `newElements`.
+  mutating func replaceRange(_ subRange: Range, with newElements: [E])  ( O )
+  mutating func replaceRange(_ r: Range, with: [E])                     ( X )
+  ```
+- 함수를 구성하는 문장에 전치사구가 들어갈 때 첫번째 인자명은 전치사부터 시작한다
+  e.g. x.removeBoxes(havingLength: 12).
+  ``` swift
+  // 예외적으로 인자들이 공통적인 전치사를 갖을 땐 함수명으로 뺀다
+  a.move(toX: b, y: c)                  ( X )
+  a.moveTo(x: b, y: c)                  ( O )
+  ```
+- 클로저(closure)와 튜플(tuple) 인자명은 모두 명시한다
+- 기본 인자를 활용한다
 
 
 <a name="delegates"/>

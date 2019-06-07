@@ -124,8 +124,6 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
     x = y.union(z)        <->     y.formUnion(z)
     j = c.successor(i)    <->     c.formSuccessor(&i)
     ```
-  - non-mutating 함수는 -ed, -ing가 들어가는 동사를 사용한다 e.g., print(x), x.sort(), x.append(y).
-  - mutating 함수는 formX 식의 명사를 사용한다. e.g. x.distance(to: y), i.successor().
   - boolean types should read like assertions
   - protocols that describe what something is should read as nouns
   - protocols that describe a capability should end in -able or -ible

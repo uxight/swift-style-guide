@@ -69,7 +69,8 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 ## 네이밍(Naming)
 읽기만 해도 유추가 가능할 정도로 설명적으로 네이밍 한다. 
 [API Design Guidelines](https://swift.org/documentation/api-design-guidelines/)의 Swift 네이밍 컨벤션을 사용한다.
-<addr><addr>개략적인 내용:
+ 
+개략적인 내용:
 - 사용할 때 명확하게 이해할 수 있게 작성한다
 - 간결하게 하는 것보다 명확하게 만드는 것이 훨씬 더 중요하다
 - 카멜(camel) 케이스를 사용한다 (snake case 금지)

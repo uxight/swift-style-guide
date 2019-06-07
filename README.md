@@ -14,7 +14,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 - [정확성(Correctness)](#correctness)
 - [네이밍(Naming)](#naming)
   - Prose
-  - Delegates
+  - [Delegates](#delegates)
   - Use Type Inferred Context
   - Generics
   - Class Prefixes
@@ -69,7 +69,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 ## 네이밍(Naming)
 읽기만 해도 유추가 가능할 정도로 설명적으로 네이밍 한다. 
 [API Design Guidelines](https://swift.org/documentation/api-design-guidelines/)의 Swift 네이밍 컨벤션을 사용한다.
-대략적이 요약 내용:
+개략적인 내용:
 - 사용할 때 명확하게 이해할 수 있게 작성한다
 - 간결하게 하는 것보다 명확하게 만드는 것이 훨씬 더 중요하다
 - 카멜(camel) 케이스를 사용한다 (snake case 금지)
@@ -97,7 +97,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   func addObserver(_ observer: NSObject, forKeyPath path: String)
   grid.addObserver(self, forKeyPath: graphics) // 뭘 하는 건지 명확하다
   ```
-- 언어적으로 잘 읽히고 쓰일 수 있게 작성하려 노력한다(striving for fluent usage)
+- 언어적으로 잘 읽히고 쓰일 수 있게 작성하려 노력한다 (striving for fluent usage)
   ``` swift
   x.insert(y, at: z)          ( O ) -> “x, insert y at z”
   x.insert(y, position: z)    ( X ) 
@@ -109,9 +109,9 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   x.nounCapitalize()          ( X ) 
   ```
 - factory methods는 `make`로 시작한다 e.g. x.makeIterator()
-- 함수는 어떤 일을 수행하는지를 고려해 네이밍한다 naming methods for their side effects
-  - 함수 호출로 어딘가에 영향을 받는다면(값이 바뀌거나) 동사형을 사용한다 e.g. print(x), x.sort(), x.append(y).
-  - 다른 곳에 영향을 주지 않는다면 명사형을 사용한다 e.g. x.distance(to: y), i.successor().
+- 함수는 어떤 일을 수행하는지를 고려해 네이밍한다
+  - 함수 호출로 어딘가에 영향을 받는다면(값이 바뀌거나) 동사형을 사용한다, e.g. print(x), x.sort(), x.append(y).
+  - 다른 곳에 영향을 주지 않는다면 명사형을 사용한다, e.g. x.distance(to: y), i.successor().
   - 수행하는 일이 동사로 서술되는 함수라면 동사형을 사용하고 mutating 일 땐 -ed, -ing 를 끝에 붙인다.
     ``` swift
     //[non-mutating]    <->     [mutating]
@@ -124,9 +124,10 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
     x = y.union(z)        <->     y.formUnion(z)
     j = c.successor(i)    <->     c.formSuccessor(&i)
     ```
-  - boolean types should read like assertions
-  - protocols that describe what something is should read as nouns
-  - protocols that describe a capability should end in -able or -ible
+  - boolean 타입은 assertions 처럼 읽혀야 한다, e.g. x.isEmpty, line1.intersects(line2).
+  - 무언가를 설명하는 protocol은 명사로 읽혀야 한다, e.g. Collection
+  - 가능한지에 대한 protocol은 -able, -ible 혹은 -ing 로 끝나야 한다, e.g. Equatable, ProgressReporting
+  - 나머지 type, propertie, variable, and constant 들은 모두 명사로 읽혀야 한다
 - using terms that don't surprise experts or confuse beginners
 - generally avoiding abbreviations
 - using precedent for names
@@ -139,6 +140,8 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 - labeling closure and tuple parameters
 - taking advantage of default parameters
 
+
+<a name="delegates"/>
 
 ### Delegates
 When creating custom delegate methods, an unnamed first parameter should be the delegate source. (UIKit contains numerous examples of this.)

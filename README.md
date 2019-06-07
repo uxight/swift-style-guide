@@ -138,7 +138,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
     x.sort()     | z = x.sorted()
     x.append(y)  | z = x.appending(y)    
 
-  - 수행하는 일이 명사로 서술되는 함수라면 명사형을 사용하고 mutating 일 땐 from- 를 처음에 붙인다.
+  - 수행하는 일이 명사로 서술되는 함수라면 명사형을 사용하고 mutating 일 땐 form- 를 처음에 붙인다.
   
     non-mutating | mutating
     ------------ | -------------
@@ -146,12 +146,12 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
     j = c.successor(i) | c.formSuccessor(&i)
 
 - boolean 타입은 assertions 처럼 읽혀야 한다, *e.g. x.isEmpty, line1.intersects(line2).*
-- 무언가를 설명하는 protocol은 명사로 읽혀야 한다, *e.g. Collection*
-- 가능한지에 대한 protocol은 -able, -ible 혹은 -ing 로 끝나야 한다, *e.g. Equatable, ProgressReporting*
-- 나머지 type, propertie, variable, and constant 들은 모두 명사로 읽혀야 한다
+- 무언가를 설명하는 프로토콜(protocol)은 명사로 읽혀야 한다, *e.g. Collection*
+- 가능한지에 대한 프로토콜(protocol)은 -able, -ible 혹은 -ing 로 끝나야 한다, *e.g. Equatable, ProgressReporting*
+- 나머지 타입(type), 속성(propertie), 변수(variable), 상수(constant) 들은 모두 명사로 읽혀야 한다
 
 - 대체 가능한 일반적이고 쉬운 용어가 있다면 전문 용어를 쓰지 않는다
-  - 전문 용어를 사용해야만 뜻이 잘 전달되는 경우라면 정확한 의미 맞게 사용한다
+  - 전문 용어를 사용해야만 뜻이 잘 전달되는 경우라면 정확한 의미에 맞게 사용한다
 - 웬만하면 약자를 쓰지 않는다
 - 기존에 쓰이는 용어를 그대로 쓰지 않고, 초보자를 위해 풀어쓰거나 쉬운 대체 용어를 쓰지 않는다
 

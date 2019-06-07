@@ -115,6 +115,18 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   - boolean types should read like assertions
   - protocols that describe what something is should read as nouns
   - protocols that describe a capability should end in -able or -ible
+- using terms that don't surprise experts or confuse beginners
+- generally avoiding abbreviations
+- using precedent for names
+- preferring methods and properties to free functions
+- casing acronyms and initialisms uniformly up or down
+- giving the same base name to methods that share the same meaning
+- avoiding overloads on return type
+- choosing good parameter names that serve as documentation
+- preferring to name the first parameter instead of including its name in the method name, except as mentioned under Delegates
+- labeling closure and tuple parameters
+- taking advantage of default parameters
+
 
 ### Delegates
 When creating custom delegate methods, an unnamed first parameter should be the delegate source. (UIKit contains numerous examples of this.)

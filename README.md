@@ -128,10 +128,17 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   - 무언가를 설명하는 protocol은 명사로 읽혀야 한다, e.g. Collection
   - 가능한지에 대한 protocol은 -able, -ible 혹은 -ing 로 끝나야 한다, e.g. Equatable, ProgressReporting
   - 나머지 type, propertie, variable, and constant 들은 모두 명사로 읽혀야 한다
-- using terms that don't surprise experts or confuse beginners
-- generally avoiding abbreviations
-- using precedent for names
-- preferring methods and properties to free functions
+- 전문가나 초보자 모두에게 쉬운 용어를 사용한다
+- 웬만하면 약자를 쓰지 않는다
+- 기존에 쓰이는 용어를 그대로 쓰지 않고, 초보자를 위해 풀어쓰거나 쉬운 대체 용어를 쓰지 않는다
+- 자유 함수(free function)는 특별한 경우에만 사용한다
+  ``` swift
+  min(x, y, z) // 명백히 주체가 없을 경우
+  
+  print(x) // 일반적으로 제약이 없는 함수일 때
+  
+  sin(x) // 함수 구문이 설정된 도메인 표기법의 일부일 때(When function syntax is part of the established domain notation)
+  ```
 - casing acronyms and initialisms uniformly up or down
 - giving the same base name to methods that share the same meaning
 - avoiding overloads on return type

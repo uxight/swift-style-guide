@@ -95,7 +95,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   
   // 해당 인자의 역할을 이해할 수 있게 파라미터 명을 추가해준다
   func addObserver(_ observer: NSObject, forKeyPath path: String)
-  grid.addObserver(self, forKeyPath: graphics) // clear
+  grid.addObserver(self, forKeyPath: graphics) // 뭘 하는 건지 명확하다
   ```
 - 언어적으로 잘 읽히고 쓰일 수 있게 작성하려 노력한다(striving for fluent usage)
   ``` swift

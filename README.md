@@ -116,7 +116,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   x.capitalizingNouns()       ( O ) -> “x, capitalizing nouns”
   x.nounCapitalize()          ( X ) 
   ```
-- factory methods는 `make`로 시작한다 *e.g. x.makeIterator()*
+- factory methods는 `make`로 시작한다, *e.g. x.makeIterator()*
 - 초기화 함수(initializer)와 factory methods 호출은 첫번째 인자명을 함수명과 이어서 읽지 않는다, *e.g. x.makeWidget(cogCount: 47)*
   ``` swift
   let foreground = Color(red: 32, green: 64, blue: 128)                     ( O )

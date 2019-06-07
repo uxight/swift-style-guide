@@ -113,6 +113,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   - 함수 호출로 어딘가에 영향을 받는다면(값이 바뀌거나) 동사형을 사용한다, e.g. print(x), x.sort(), x.append(y).
   - 다른 곳에 영향을 주지 않는다면 명사형을 사용한다, e.g. x.distance(to: y), i.successor().
   - 수행하는 일이 동사로 서술되는 함수라면 동사형을 사용하고 mutating 일 땐 -ed, -ing 를 끝에 붙인다.
+  
 non-mutating | mutating
 ------------ | -------------
 x.sort()     | z = x.sorted()

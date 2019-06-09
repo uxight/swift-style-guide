@@ -188,7 +188,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   mutating func replaceRange(_ subRange: Range, with newElements: [E])  ( O )
   mutating func replaceRange(_ r: Range, with: [E])                     ( X )
   ```
-- 기본 인자를 활용한다 (인자 유무에 따라 여러개의 함수를 작성하지 않아도 됨)
+- 기본 인자를 활용한다 (인자 유무에 따라 여러개의 함수를 각각 만들지 않아도 됨)
   ``` swift
   let order = lastName.compare(royalFamilyName)                                       ( O )
   let order = lastName.compare(royalFamilyName, options: [], range: nil, locale: nil) ( X )

@@ -16,11 +16,11 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 - [정확성(Correctness)](#correctness)
 - [네이밍(Naming)](#naming)
   - [설명문(Prose)](#prose)
+  - [접두어(Class Prefixes)](#class_prefixes)
   - [딜리게이트(Delegates)](#delegates)
   - [축약 형태 사용(Use Type Inferred Context)](#use_type_inferred_context)
-  - Generics
-  - Class Prefixes
-  - Language
+  - [제너릭(Generics)](#generics)
+  - [언어(Language)](#language)
 - Code Organization
   - Protocol Conformance
   - Unused Code
@@ -227,6 +227,8 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 Tip: Xcode's jump bar 에서 함수를 인자명과 함께 찾아볼 수 있다. 혹은 커서를 함수명에 놓고 Shift-Control-Option-Command-C 4개의 키를 동시에 누르면 클립보드에 함수 형태가 복사된다.
 
 
+<a name="class_prefixes"/>
+
 ### 접두어(Class Prefixes)
 클래스에 RW 같은 특정 접두어를 붙이지 않는다. 만약 두 이름이 같아서 헷갈리면 앞에 모듈명을 붙여 명확히 할 수 있다. 이런 경우는 거의 없으므로 굳이 모듈명을 앞에 붙이진 않는다.
 ``` swift
@@ -273,4 +275,73 @@ let toView = context.view(forKey: UITransitionContextViewKey.to)
 let view = UIView(frame: CGRect.zero)
 ```
 
+<a name="generics"/>
+
+### 제너릭(Generics)
+제너릭 타입은 설명적이고 upper camel case 형태여야 한다. 관련된 뜻이나 역할이 없을 경우 T, U, V 등의 대문자 한글자로 쓴다.
+
+#### Preferred:
+``` swift
+struct Stack<Element> { ... }
+func write<Target: OutputStream>(to target: inout Target)
+func swap<T>(_ a: inout T, _ b: inout T)
+```
+#### Not Preferred:
+``` swift
+struct Stack<T> { ... }
+func write<target: OutputStream>(to target: inout target)
+func swap<Thing>(_ a: inout Thing, _ b: inout Thing)
+```
+
+<a name="language"/>
+
+### 언어(Language)
+US English 를 표준으로 사용하고 애플의 API 형식에 맞게 사용한다.
+
+#### Preferred:
+``` swift
+let color = "red"
+```
+#### Not Preferred:
+``` swift
+let colour = "red"
+```
+
+<a name="code_organization"/>
+
+## 코드 구조화(Code Organization)
+익스텐션(extension)을 활용해 코드를 기능에 따라 분류한다. 분류한 각 익스텐션 마다 MARK 설정을 해준다 // MARK: - 코드를 잘 구조화하기 위해 주석을 단다
+
+<a name="protocol_conformance"/>
+
+### Protocol Conformance
+특히, 모델에 프로토콜을 적용시킬 땐 각 프로토콜을 종류별로 각각 extension으로 적용시킨다. 이렇게하면 관련된 코드들을 그룹화할 수 있고 추가할 때도 어디에 추가해야할지 쉽게 파악할 수 있다.
+
+#### Preferred:
+``` swift
+class MyViewController: UIViewController {
+  // 클래스 관련 코드들
+}
+
+// MARK: - UITableViewDataSource
+extension MyViewController: UITableViewDataSource {
+  // 테이블뷰의 데이터소스 함수들
+}
+
+// MARK: - UIScrollViewDelegate
+extension MyViewController: UIScrollViewDelegate {
+  // 스크롤뷰의 딜리게이트 함수들
+}
+```
+#### Not Preferred:
+``` swift
+class MyViewController: UIViewController, UITableViewDataSource, UIScrollViewDelegate {
+  // 모든 함수들을 한 곳에
+}
+```
+
+컴파일러는 프로토콜을 재적용하는걸 허용하 않기 때문에 ㅋ
+Since the compiler does not allow you to re-declare protocol conformance in a derived class, it is not always required to replicate the extension groups of the base class. This is especially true if the derived class is a terminal class and a small number of methods are being overridden. When to preserve the extension groups is left to the discretion of the author.
+
+For UIKit view controllers, consider grouping lifecycle, custom accessors, and IBAction in separate class extensions.
 

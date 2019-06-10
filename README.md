@@ -15,7 +15,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 ## 목차
 - [정확성(Correctness)](#correctness)
 - [네이밍(Naming)](#naming)
-  - Prose
+  - [설명문(Prose)](#prose)
   - [딜리게이트(Delegates)](#delegates)
   - Use Type Inferred Context
   - Generics
@@ -214,10 +214,32 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 
  
  
+<a name="prose"/>
+
+### 설명문(Prose)
+주석과 같은 설명문에서 함수(method)를 지칭할 땐 최대한 심플한 형태로 쓴다.
+1. 인자없이 함수명만. 예시: 다음, addTarget을 호출하세요.
+2. 함수명과 인자명 둘다. 예시: 다음, addTarget(_:action:)을 호출하세요.
+3. 함수명에 인자와 타입까지 명시. 예시: 다음, addTarget(_: Any?, action: Selector?)을 호출하세요.
+위의 UIGestureRecognizer 을 사용하는 예시 에서는 1처럼 쓰는 것이 덜 혼동되고 선호된다.
+
+Tip: Xcode's jump bar 에서 함수를 인자명과 함께 찾아볼 수 있다. 혹은 커서를 함수명에 놓고 Shift-Control-Option-Command-C 4개의 키를 동시에 누르면 클립보드에 함수 형태가 복사된다.
+
+
+### 접두어(Class Prefixes)
+RW 클래스에 특정 접두어를 붙이지 않는다. 만약 두 이름이 같아서 헷갈리면 앞에 모듈명을 붙여 명확히 할 수 있다. 이런 경우는 거의 없으므로 굳이 모듈명을 앞에 붙이진 않는다.
+``` swift
+import SomeModule
+
+let myClass = MyModule.UsefulClass()
+```
+
 <a name="delegates"/>
 
-### Delegates
-When creating custom delegate methods, an unnamed first parameter should be the delegate source. (UIKit contains numerous examples of this.)
+### 딜리게이트(Delegates)
+커스텀 딜리게이트를 만들 때, 첫번째 인자는 생략 가능한 형태로 딜리게이트 소스를 사용한다. (UIKit에 다양한 예제들이 있다.)
+또한 아래 예시처럼 함수명에 namePickerView를 모두 붙여줌으로써, 여러개의 딜리게이트를 사용하거나 비슷한 이름의 함수가 존재하는 경우 혼동을 줄이고
+어떤 프로토콜에서 사용되는 함수인지 바로 알기 쉽다.
 
 #### Preferred:
 ``` swift
@@ -226,6 +248,7 @@ func namePickerViewShouldReload(_ namePickerView: NamePickerView) -> Bool
 ```
 #### Not Preferred:
 ``` swift
-func namePickerView(_ namePickerView: NamePickerView, didSelectName name: String)
-func namePickerViewShouldReload(_ namePickerView: NamePickerView) -> Bool
+func didSelectName(namePicker: NamePickerViewController, name: String)
+func namePickerShouldReload() -> Bool
 ```
+

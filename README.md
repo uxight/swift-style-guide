@@ -17,7 +17,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 - [네이밍(Naming)](#naming)
   - [설명문(Prose)](#prose)
   - [딜리게이트(Delegates)](#delegates)
-  - Use Type Inferred Context
+  - [축약 형태 사용(Use Type Inferred Context)](#use_type_inferred_context)
   - Generics
   - Class Prefixes
   - Language
@@ -221,13 +221,14 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 1. 인자없이 함수명만. 예시: 다음, addTarget을 호출하세요.
 2. 함수명과 인자명 둘다. 예시: 다음, addTarget(_:action:)을 호출하세요.
 3. 함수명에 인자와 타입까지 명시. 예시: 다음, addTarget(_: Any?, action: Selector?)을 호출하세요.
+ 
 위의 UIGestureRecognizer 을 사용하는 예시 에서는 1처럼 쓰는 것이 덜 혼동되고 선호된다.
 
 Tip: Xcode's jump bar 에서 함수를 인자명과 함께 찾아볼 수 있다. 혹은 커서를 함수명에 놓고 Shift-Control-Option-Command-C 4개의 키를 동시에 누르면 클립보드에 함수 형태가 복사된다.
 
 
 ### 접두어(Class Prefixes)
-RW 클래스에 특정 접두어를 붙이지 않는다. 만약 두 이름이 같아서 헷갈리면 앞에 모듈명을 붙여 명확히 할 수 있다. 이런 경우는 거의 없으므로 굳이 모듈명을 앞에 붙이진 않는다.
+클래스에 RW 같은 특정 접두어를 붙이지 않는다. 만약 두 이름이 같아서 헷갈리면 앞에 모듈명을 붙여 명확히 할 수 있다. 이런 경우는 거의 없으므로 굳이 모듈명을 앞에 붙이진 않는다.
 ``` swift
 import SomeModule
 
@@ -251,4 +252,25 @@ func namePickerViewShouldReload(_ namePickerView: NamePickerView) -> Bool
 func didSelectName(namePicker: NamePickerViewController, name: String)
 func namePickerShouldReload() -> Bool
 ```
+
+<a name="use_type_inferred_context"/>
+
+### 축약 형태 사용(Use Type Inferred Context)
+컴파일러가 추론 가능한 형태로, 생략 가능한 부분은 줄여서 짧게 쓴다.
+
+#### Preferred:
+``` swift
+let selector = #selector(viewDidLoad)
+view.backgroundColor = .red
+let toView = context.view(forKey: .to)
+let view = UIView(frame: .zero)
+```
+#### Not Preferred:
+``` swift
+let selector = #selector(ViewController.viewDidLoad)
+view.backgroundColor = UIColor.red
+let toView = context.view(forKey: UITransitionContextViewKey.to)
+let view = UIView(frame: CGRect.zero)
+```
+
 

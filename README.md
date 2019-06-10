@@ -21,10 +21,10 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   - [축약 형태 사용(Use Type Inferred Context)](#use_type_inferred_context)
   - [제너릭(Generics)](#generics)
   - [언어(Language)](#language)
-- Code Organization
-  - Protocol Conformance
-  - Unused Code
-  - Minimal Imports
+- [코드 구조화(Code Organization)](#code_organization)
+  - [프로토콜 적용(Protocol Conformance)](#protocol_conformance)
+  - [필요없는 코드(Unused Code)](#unused_code)
+  - [import 최소화(Minimal Imports)](#minimal_imports)
 - Spacing
 - Comments
 - Classes and Structures
@@ -310,11 +310,13 @@ let colour = "red"
 <a name="code_organization"/>
 
 ## 코드 구조화(Code Organization)
-익스텐션(extension)을 활용해 코드를 기능에 따라 분류한다. 분류한 각 익스텐션 마다 MARK 설정을 해준다 // MARK: - 코드를 잘 구조화하기 위해 주석을 단다
+익스텐션(extension)을 활용해 코드를 기능에 따라 분류한다. 분류한 각 익스텐션 마다 MARK 설정을 해준다. 
+ 
+*// MARK: - 코드를 잘 구조화하기 위해 주석을 단다*
 
 <a name="protocol_conformance"/>
 
-### Protocol Conformance
+### 프로토콜 적용(Protocol Conformance)
 특히, 모델에 프로토콜을 적용시킬 땐 각 프로토콜을 종류별로 각각 extension으로 적용시킨다. 이렇게하면 관련된 코드들을 그룹화할 수 있고 추가할 때도 어디에 추가해야할지 쉽게 파악할 수 있다.
 
 #### Preferred:
@@ -340,8 +342,72 @@ class MyViewController: UIViewController, UITableViewDataSource, UIScrollViewDel
 }
 ```
 
-컴파일러는 프로토콜을 재적용하는걸 허용하 않기 때문에 ㅋ
+자식 클래스(derived class)에서는 부모 클래스(base class)에서 이미 적용한 프로토콜을 다시 선언하고 적용시키는 것이 불가능하기 때문에, 
+부모 클래스의 그룹화된 익스텐션 코드들을 그대로 복사해 넣을 필요는 없다. 특히 자식 클래스가 터미널 클래스(terminal class)이고 오버라이드된 함수가 몇 개 없을 경우 더 그렇다. 언제 익스텐션 그룹들을 유지할지는 작성자의 재량에 달려있다.
+
+UIKit의 뷰컨틀롤러에선 라이프사이클(lifecycle), 커스텀 접근자(accessors), IBAction 을 따로 클래스 익스텐션에 그룹화하는 것을 고려한다.
+
 Since the compiler does not allow you to re-declare protocol conformance in a derived class, it is not always required to replicate the extension groups of the base class. This is especially true if the derived class is a terminal class and a small number of methods are being overridden. When to preserve the extension groups is left to the discretion of the author.
 
 For UIKit view controllers, consider grouping lifecycle, custom accessors, and IBAction in separate class extensions.
 
+
+<a name="unused_code"/>
+
+### 필요없는 코드(Unused Code)
+엑스코드에서 기본 작성 돼 있는 코드, 주석들을 포함해 쓰지 않는 코드들은 지운다. 사용자에게 주석된 코드를 사용하도록 알려주는 튜토리얼은 예외다.
+
+튜토리얼과 상관없이 구현부에 단순히 부모 클래스(superclass)에 호출하는 코드만 있는 함수도 삭제한다. 사용하지 않거나 빈 UIApplicationDelegate 함수들도 마찬가지다.
+ 
+Unused (dead) code, including Xcode template code and placeholder comments should be removed. An exception is when your tutorial or book instructs the user to use the commented code.
+ 
+Aspirational methods not directly associated with the tutorial whose implementation simply calls the superclass should also be removed. This includes any empty/unused UIApplicationDelegate methods.
+
+#### Preferred:
+``` swift
+override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  return Database.contacts.count
+}
+```
+#### Not Preferred:
+``` swift
+override func didReceiveMemoryWarning() {
+  super.didReceiveMemoryWarning()
+  // Dispose of any resources that can be recreated.
+}
+
+override func numberOfSections(in tableView: UITableView) -> Int {
+  // #warning Incomplete implementation, return the number of sections
+  return 1
+}
+
+override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  // #warning Incomplete implementation, return the number of rows
+  return Database.contacts.count
+}
+```
+
+<a name="unused_code"/>
+
+### import 최소화(Minimal Imports)
+꼭 필요한 모듈만 import 한다. Foundation 으로 충분한 상태인데 굳이 UIKit 을 import 하지 않는다. 마찬가지로 UIKit 을 써야하는 상황이라면 Foundation 까지 한번 더 import 하지 않는다. 
+
+#### Preferred:
+``` swift
+import UIKit
+var view: UIView
+var deviceModels: [String]
+--------------------
+import Foundation
+var deviceModels: [String]
+```
+#### Not Preferred:
+``` swift
+import UIKit
+import Foundation
+var view: UIView
+var deviceModels: [String]
+--------------------
+import UIKit
+var deviceModels: [String]
+```

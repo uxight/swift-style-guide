@@ -387,7 +387,7 @@ override func tableView(_ tableView: UITableView, numberOfRowsInSection section:
 }
 ```
 
-<a name="unused_code"/>
+<a name="minimal_imports"/>
 
 ### import 최소화(Minimal Imports)
 꼭 필요한 모듈만 import 한다. Foundation 으로 충분한 상태인데 굳이 UIKit 을 import 하지 않는다. 마찬가지로 UIKit 을 써야하는 상황이라면 Foundation 까지 한번 더 import 하지 않는다. 

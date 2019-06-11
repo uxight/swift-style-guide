@@ -473,15 +473,15 @@ Add a single newline character at the end of each file.
 <a name="classes_and_structures"/>
 
 ## 클래스와 스트럭트(Classes and Structures)
-### Which one to use?
+### 어떤 걸 사용해야 하는가?
 스트럭트(struct)는 밸류(value) 타입으로 고유한 성질을 갖을 필요가 없을 때 사용한다. a, b, c 를 포함하고 있는 [a, b, c] 라는 배열은 똑같은 원소를 포함하고 있다면 다른 배열 [a, b, c] 와 완전히 똑같다. 두 배열을 구분해야할 이유가 전혀 없고 둘 중 어느걸 쓰던 바꿔서 써도 전혀 문제가 없다. 따라서 배열처럼 이런 성질을 갖을 땐 스트럭트를 사용한다.
  
 클래스(class)는 레퍼런스(reference) 타입으로 특정 주기동안 고유한 값을 갖어야 할 때 사용한다. 클래스로 사람이라는 모델을 만들 때 두 사람은 서로 고유한 다른 객체이다. 두 사람의 이름, 생일이 같더라도 같은 사람은 아니다. 그러나 사람이라는 모델 안에 있는 생일이라는 속성은 스트럭트이다. 1950년 3월 3일 이라는 날짜 값이 있다 할 때 같은 날짜의 다른 값과 구분되어야 하는 경우는 없다. 날짜는 그 자체로 고유한 성질을 갖을 필요가 없다.
  
 가끔 스트럭트로 만들어야 하는데 AnyObject 를 상속해야해서 어쩔 수 없거나 이미 클래스로 만들어진 경우(NSDate, NSSet)가 있다. 최대한 가이드라인을 따르려고 노력한다.
 
-### Example definition
-아래가 잘 정의된 클래스 스타일 예제이다.
+### 예제 정의
+아래 잘 정의된 클래스 스타일 예제이다.
 ``` swift
 class Circle: Shape {
   var x: Int, y: Int
@@ -520,7 +520,7 @@ extension Circle: CustomStringConvertible {
 }
 ```
  
-The example above demonstrates the following style guidelines:
+위의 예제는 아래 스타일 가이드라인이 적용 돼 있다:
 
 - Specify types for properties, variables, constants, argument declarations and other statements with a space after the colon but not before, e.g. x: Int, and Circle: Shape.
 - Define multiple variables and structures on a single line if they share a common purpose / context.

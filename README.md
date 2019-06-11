@@ -397,7 +397,7 @@ override func tableView(_ tableView: UITableView, numberOfRowsInSection section:
 import UIKit
 var view: UIView
 var deviceModels: [String]
---------------------
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 import Foundation
 var deviceModels: [String]
 ```

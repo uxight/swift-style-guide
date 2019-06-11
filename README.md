@@ -27,7 +27,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   - [import 최소화(Minimal Imports)](#minimal_imports)
 - [빈공간(Spacing)](#spacing)
 - [주석(Comments)](#comments)
-- Classes and Structures
+- [클래스와 스트럭트(Classes and Structures)](#classes_and_structures)
   - Use of Self
   - Protocol Conformance
   - Computed Properties
@@ -466,6 +466,69 @@ Add a single newline character at the end of each file.
 ## 주석(Comments)
 필요할 땐 특정 코드가 수행하는 작업에 대해 주석을 달아 설명한다. 주석은 최신 상태를 유지하거나 지워야 한다.
  
-코드는 그 자체적으로도 설명적이어야 하므로 코드내에서 주석을 다는 것을 피한다.
+코드는 그 자체적으로도 설명적이어야 하므로 코드내에서 주석을 다는 것을 피한다. 예외: 문서(documentation) 생성할 때 사용되는 주석.
  
 ~~C-style 주석(/* ... */) 사용을 피하고 // 혹은 /// 를 사용한다.~~ -> 애플 공식 문서에서도 둘다 혼용해서 쓰이므로 굳이 한 쪽을 배제하진 않는다
+
+<a name="classes_and_structures"/>
+
+## 클래스와 스트럭트(Classes and Structures)
+### Which one to use?
+스트럭트(struct)는 밸류(value) 타입으로 고유한 성질을 갖을 필요가 없을 때 사용한다. a, b, c 를 포함하고 있는 [a, b, c] 라는 배열은 똑같은 원소를 포함하고 있다면 다른 배열 [a, b, c] 와 완전히 똑같다. 두 배열을 구분해야할 이유가 전혀 없고 둘 중 어느걸 쓰던 바꿔서 써도 전혀 문제가 없다. 따라서 배열처럼 이런 성질을 갖을 땐 스트럭트를 사용한다.
+ 
+클래스(class)는 레퍼런스(reference) 타입으로 특정 주기동안 고유한 값을 갖어야 할 때 사용한다. 클래스로 사람이라는 모델을 만들 때 두 사람은 서로 고유한 다른 객체이다. 두 사람의 이름, 생일이 같더라도 같은 사람은 아니다. 그러나 사람이라는 모델 안에 있는 생일이라는 속성은 스트럭트이다. 1950년 3월 3일 이라는 날짜 값이 있다 할 때 같은 날짜의 다른 값과 구분되어야 하는 경우는 없다. 날짜는 그 자체로 고유한 성질을 갖을 필요가 없다.
+ 
+가끔 스트럭트로 만들어야 하는데 AnyObject 를 상속해야해서 어쩔 수 없거나 이미 클래스로 만들어진 경우(NSDate, NSSet)가 있다. 최대한 가이드라인을 따르려고 노력한다.
+
+### Example definition
+아래가 잘 정의된 클래스 스타일 예제이다.
+``` swift
+class Circle: Shape {
+  var x: Int, y: Int
+  var radius: Double
+  var diameter: Double {
+    get {
+      return radius * 2
+    }
+    set {
+      radius = newValue / 2
+    }
+  }
+
+  init(x: Int, y: Int, radius: Double) {
+    self.x = x
+    self.y = y
+    self.radius = radius
+  }
+
+  convenience init(x: Int, y: Int, diameter: Double) {
+    self.init(x: x, y: y, radius: diameter / 2)
+  }
+
+  override func area() -> Double {
+    return Double.pi * radius * radius
+  }
+}
+
+extension Circle: CustomStringConvertible {
+  var description: String {
+    return "center = \(centerString) area = \(area())"
+  }
+  private var centerString: String {
+    return "(\(x),\(y))"
+  }
+}
+```
+ 
+The example above demonstrates the following style guidelines:
+
+- Specify types for properties, variables, constants, argument declarations and other statements with a space after the colon but not before, e.g. x: Int, and Circle: Shape.
+- Define multiple variables and structures on a single line if they share a common purpose / context.
+- Indent getter and setter definitions and property observers.
+- Don't add modifiers such as internal when they're already the default. Similarly, don't repeat the access modifier when overriding a method.
+- Organize extra functionality (e.g. printing) in extensions.
+- Hide non-shared, implementation details such as centerString inside the extension using private access control.
+
+
+
+

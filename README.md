@@ -464,9 +464,8 @@ Add a single newline character at the end of each file.
 <a name="comments"/>
 
 ## 주석(Comments)
-When they are needed, use comments to explain why a particular piece of code does something. Comments must be kept up-to-date or deleted.
-
-Avoid block comments inline with code, as the code should be as self-documenting as possible. Exception: This does not apply to those comments used to generate documentation.
-
-Avoid the use of C-style comments (/* ... */). Prefer the use of double- or triple-slash.
-
+필요할 땐 특정 코드가 수행하는 작업에 대해 주석을 달아 설명한다. 주석은 최신 상태를 유지하거나 지워야 한다.
+ 
+코드는 그 자체적으로도 설명적이어야 하므로 코드내에서 주석을 다는 것을 피한다.
+ 
+~~C-style 주석(/* ... */) 사용을 피하고 // 혹은 /// 를 사용한다.~~ -> 애플 공식 문서에서도 둘다 혼용해서 쓰이므로 굳이 한 쪽을 배제하진 않는다

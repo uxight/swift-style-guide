@@ -25,8 +25,8 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   - [프로토콜 적용(Protocol Conformance)](#protocol_conformance)
   - [필요없는 코드(Unused Code)](#unused_code)
   - [import 최소화(Minimal Imports)](#minimal_imports)
-- Spacing
-- Comments
+- [빈공간(Spacing)](#spacing)
+- [주석(Comments)](#comments)
 - Classes and Structures
   - Use of Self
   - Protocol Conformance
@@ -407,7 +407,66 @@ import UIKit
 import Foundation
 var view: UIView
 var deviceModels: [String]
---------------------
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 import UIKit
 var deviceModels: [String]
 ```
+
+<a name="spacing"/>
+
+## 빈공간(Spacing)
+- ~~들여쓰기를 탭보다는 스페이스 2번으로 하고, Xcode 프로젝트 설정에서 탭과 들여쓰기를 2개의 스페이스로 설정하라~~ -> 굳이 기본 설정 값을 바꾸지 않는다
+- if/else/switch/while 등의 { 괄호는 항상 같은 줄에서 시작하고 닫는 괄호(})는 새로운 줄에 해준다.
+- Tip: 특정 코드를 선택(혹은 커맨드+A로 전체 선택)하고 컨트롤+I(혹은 메뉴에서 Editor ▸ Structure ▸ Re-Indent)를 눌러 들여쓰기를 자동으로 재적용 시킬 수 있다. 
+
+#### Preferred:
+``` swift
+if user.isHappy {
+  // Do something
+} else {
+  // Do something else
+}
+```
+#### Not Preferred:
+``` swift
+if user.isHappy
+{
+  // Do something
+}
+else {
+  // Do something else
+}
+```
+
+- 시각적으로 명확하게 구조를 파악하기 쉽도록 함수 사이엔 한 줄을 띄운다. 함수 내의 공백은 기능에 따라 구분을 시켜줘야 하지만 너무 많은 섹션이 있을 경우는 여 함수로 리팩토링을 한다.
+- 중괄호({})를 열고 난 다음 줄이나 닫기 전 줄엔 빈 줄이 없어야 한다.
+- 콜론(:)의 왼쪽은 띄어쓰기 하지 않고 오른쪽은 한 칸 띄어쓴다. 삼항 연산자 ? :, 빈 딕셔너리 [:], #selector에서의 addTarget(_:action:) 등은 예외.
+
+#### Preferred:
+``` swift
+class TestDatabase: Database {
+  var data: [String: CGFloat] = ["A": 1.2, "B": 3.2]
+}
+```
+#### Not Preferred:
+``` swift
+class TestDatabase : Database {
+  var data :[String:CGFloat] = ["A" : 1.2, "B":3.2]
+}
+```
+
+- 긴 줄은 70자 내외로 끝나도록 한다. 엄격하게 제한하진 않는다.
+Long lines should be wrapped at around 70 characters. A hard limit is intentionally not specified.
+- 마지막 줄의 끝에 공백은 피한다.
+- 각 파일의 마지막 줄엔 빈 줄을 하나 추가해준다. 
+Add a single newline character at the end of each file.
+
+<a name="comments"/>
+
+## 주석(Comments)
+When they are needed, use comments to explain why a particular piece of code does something. Comments must be kept up-to-date or deleted.
+
+Avoid block comments inline with code, as the code should be as self-documenting as possible. Exception: This does not apply to those comments used to generate documentation.
+
+Avoid the use of C-style comments (/* ... */). Prefer the use of double- or triple-slash.
+

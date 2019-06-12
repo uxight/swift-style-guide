@@ -32,8 +32,8 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   - [Protocol Conformance](#protocol_conformance)
   - [Computed Properties](#computed_properties)
   - [Final](#final)
-- Function Declarations
-- Function Calls
+- [함수 선언(Function Declarations)](#function_declarations)
+- [함수 사용(Function Calls)](#function_calls)
 - Closure Expressions
 - Types
   - Constants
@@ -563,8 +563,7 @@ var diameter: Double {
 <a name="final"/>
 
 ## 파이널(Final)
-클래스나 멤버를 파이널(final)로 만드는 것은 튜토리얼에서 전달하려는 핵심을 분산시킬 수 있고 필수적이지 않다. 그럼에도 불구하고 파이널을 사용하는 것이 가끔은 구현 의도를 명확하 할 수 있고 투자할 가치가 있는 작업이다. 아래 예제에서, Box는 특정한 목적으로 만든 것이므로 상속한 클래스를 바꿔서 사용하는 것을 막아야 한다. 파이널을 사용할 경우 이런 용도를 명확하게 할 수 있다.
-Marking classes or members as final in tutorials can distract from the main topic and is not required. Nevertheless, use of final can sometimes clarify your intent and is worth the cost. In the below example, Box has a particular purpose and customization in a derived class is not intended. Marking it final makes that clear.
+클래스나 멤버를 파이널(final)로 만드는 것은 튜토리얼에서 전달하려는 핵심을 분산시킬 수 있고 필수적이지 않다. 그럼에도 불구하고 파이널을 사용하는 것이 가끔은 구현 의도를 명확하 할 수 있고 투자할 가치가 있는 작업이다. 아래 예제에서, Box는 특정한 목적으로 만든 것이므로 상속하거나 바꿔서 사용하는 것을 막아야 한다. 파이널을 사용할 경우 이런 용도를 명확하게 할 수 있다.
 
 ``` swift
 // Turn any generic type into a reference type using this Box class.
@@ -574,5 +573,59 @@ final class Box<T> {
     self.value = value
   }
 }
+```
+
+<a name="function_declarations"/>
+
+## 함수 선언(Function Declarations)
+중괄호({)를 열 때 함수 선언부 한 줄 안에서 열고, 짧은 형태 유지한다:
+``` swift
+func reticulateSplines(spline: [Double]) -> Bool {
+  // reticulate code goes here
+}
+```
+긴 함수의 경우 각 인자를 새로운 줄에서 들여쓰기 후에 시작한다.
+``` swift
+func reticulateSplines(
+  spline: [Double], 
+  adjustmentFactor: Double,
+  translateConstant: Int, comment: String
+) -> Bool {
+  // reticulate code goes here
+}
+```
+인자에 없을 때 (Void)를 사용하지 않는다. ()로 표시한다. 클로저나 함수의 리턴은 () 대신 Void를 사용한다.
+#### Preferred:
+``` swift
+func updateConstraints() -> Void {
+  // magic happens here
+}
+
+typealias CompletionHandler = (result) -> Void
+```
+#### Not Preferred:
+``` swift
+func updateConstraints() -> () {
+  // magic happens here
+}
+
+typealias CompletionHandler = (result) -> ()
+```
+
+<a name="function_calls"/>
+
+## 함수 사용(Function Calls)
+호출할 때도 선언부와 비슷하게 사용한다. 한줄짜리 함수는 아래와 같이 사용한다:
+``` swift
+let success = reticulateSplines(splines)
+```
+만약 한 줄이 넘어간다면 각 인자를 새로운 줄에 들여쓰기해서 호출한다:
+``` swift
+let success = reticulateSplines(
+  spline: splines,
+  adjustmentFactor: 1.3,
+  translateConstant: 2,
+  comment: "normalize the display"~~)~~
+  )
 ```
 

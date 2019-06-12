@@ -34,7 +34,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   - [Final](#final)
 - [함수 선언(Function Declarations)](#function_declarations)
 - [함수 사용(Function Calls)](#function_calls)
-- Closure Expressions
+- [클로저 표현(Closure Expressions)](#closure_expressions)
 - Types
   - Constants
   - Static Methods and Variable Type Properties
@@ -594,7 +594,7 @@ func reticulateSplines(
   // reticulate code goes here
 }
 ```
-인자에 없을 때 (Void)를 사용하지 않는다. ()로 표시한다. 클로저나 함수의 리턴은 () 대신 Void를 사용한다.
+인자가 없을 땐 (Void)를 사용하지 않고 ()로 표시한다. 클로저나 함수의 리턴은 () 대신 Void를 사용한다.
 #### Preferred:
 ``` swift
 func updateConstraints() {
@@ -667,3 +667,49 @@ let success = reticulateSplines(
 ```
 > 해당 문서에선 인자가 끝나는 마지막줄에 괄호를 닫았는데 선언부와 일치시켜서 사용하기 위해 다음 줄에 적기로 정했다. (둘다 허용)
 함수 사용도 선언과 마찬가지로 [구글 문서](https://google.github.io/swift/#function-calls)가 더 잘 돼 있어 이것을 따르기로 했다.
+
+<a name="closure_expressions"/>
+
+## 클로저 표현(Closure Expressions)
+~~마지막 클로저 인자 축약 표현(trailing closure syntax)은 인자가 하나일 때만 사용한다.~~ 클로저 인자의 성격을 파악하 쉽게 인자 이름을 모두 붙인다.
+> 생소한 함수이거나, 애플의 API 가 아니고 사용자가 만든 함수일 경우 다른 사람이 읽을 땐 인자의 성격에 대한 파악이 힘들 수 있다. 마지막 클로저 인자 축약 표현(trailing closure syntax)은 최대한 지양한다.
+
+#### Preferred:
+``` swift
+UIView.animate(withDuration: 1.0, animations: {
+  self.myView.alpha = 0
+}, completion: { finished in
+  self.myView.removeFromSuperview()
+})
+```
+#### Not Preferred:
+``` swift
+UIView.animate(withDuration: 1.0, animations: {
+  self.myView.alpha = 0
+}) { f in
+  self.myView.removeFromSuperview()
+}
+```
+
+클로저 표현식에서 맥락이 확실하다면 return 은 생략한다:
+``` swift
+attendeeList.sort { a, b in
+  a > b
+}
+```
+함수 연쇄 호출 시 trailing closures 는 읽기 쉽고 명확해야 한다. 띄어쓰기나 줄바꿈, 인자 생략의 사용과 시기는 작성자의 재량에 달려 있다. 
+예시:
+``` swift
+let value = numbers.map { $0 * 2 }.filter { $0 % 3 == 0 }.index(of: 90)
+
+let value = numbers
+  .map {$0 * 2}
+  .filter {$0 > 50}
+  .map {$0 + 10}
+```
+> map 등의 함수에서 괄호 안의 코드는 가독성을 위해 한 칸씩 공백을 두기로 했다:
+``` swift
+let value = numbers.map({ $0 * 2 })    ( O )
+let value = numbers.map({$0 * 2})      ( X )
+```
+

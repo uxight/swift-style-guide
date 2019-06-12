@@ -597,7 +597,7 @@ func reticulateSplines(
 인자에 없을 때 (Void)를 사용하지 않는다. ()로 표시한다. 클로저나 함수의 리턴은 () 대신 Void를 사용한다.
 #### Preferred:
 ``` swift
-func updateConstraints() -> Void {
+func updateConstraints() {
   // magic happens here
 }
 
@@ -610,6 +610,43 @@ func updateConstraints() -> () {
 }
 
 typealias CompletionHandler = (result) -> ()
+```
+> 문서와 다르게, 함수 선언 시 리턴이 Void 일 경우 생략 가능하도록 정했다. 
+함수 선언에 한해서는 [구글 문서](https://google.github.io/swift/#line-wrapping)가 더 잘 돼 있어 이것을 따르기로 했다.
+#### Preferred:
+``` swift
+public func index<Elements: Collection, Element>(
+  of element: Element,
+  in collection: Elements
+) -> Elements.Index?
+where
+  Elements.Element == Element,
+  Element: Equatable
+{  // GOOD.
+  for current in elements {
+    // ...
+  }
+}
+```
+#### Not Preferred:
+``` swift
+public func index<Elements: Collection, Element>(
+  of element: Element,
+  in collection: Elements
+) -> Elements.Index?
+where
+  Elements.Element == Element,
+  Element: Equatable {  // AVOID.
+  for current in elements {
+    // ...
+  }
+}
+
+public func index<Elements: Collection, Element>(of element: Element,  // AVOID.
+                                                 in collection: Elements) -> Elements.Index?
+    where Elements.Element == Element, Element: Equatable {
+  doSomething()
+}
 ```
 
 <a name="function_calls"/>
@@ -625,7 +662,8 @@ let success = reticulateSplines(
   spline: splines,
   adjustmentFactor: 1.3,
   translateConstant: 2,
-  comment: "normalize the display"~~)~~
+  comment: "normalize the display"
   )
 ```
-
+> 해당 문서에선 인자가 끝나는 마지막줄에 괄호를 닫았는데 선언부와 일치시켜서 사용하기 위해 다음 줄에 적기로 정했다. (둘다 허용)
+함수 사용도 선언과 마찬가지로 [구글 문서](https://google.github.io/swift/#function-calls)가 더 잘 돼 있어 이것을 따르기로 했다.

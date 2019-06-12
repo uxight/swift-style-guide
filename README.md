@@ -28,10 +28,10 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 - [빈공간(Spacing)](#spacing)
 - [주석(Comments)](#comments)
 - [클래스와 스트럭트(Classes and Structures)](#classes_and_structures)
-  - Use of Self
-  - Protocol Conformance
-  - Computed Properties
-  - Final
+  - [Self의 사용(Use of Self)](#use_of_self)
+  - [Protocol Conformance](#protocol_conformance)
+  - [Computed Properties](#computed_properties)
+  - [Final](#final)
 - Function Declarations
 - Function Calls
 - Closure Expressions
@@ -522,13 +522,57 @@ extension Circle: CustomStringConvertible {
  
 위의 예제는 아래 스타일 가이드라인이 적용 돼 있다:
 
-- Specify types for properties, variables, constants, argument declarations and other statements with a space after the colon but not before, e.g. x: Int, and Circle: Shape.
-- Define multiple variables and structures on a single line if they share a common purpose / context.
-- Indent getter and setter definitions and property observers.
-- Don't add modifiers such as internal when they're already the default. Similarly, don't repeat the access modifier when overriding a method.
-- Organize extra functionality (e.g. printing) in extensions.
-- Hide non-shared, implementation details such as centerString inside the extension using private access control.
+- 속성, 변수, 상수, 인자 등의 선언은 콜론(:) 다음 한 칸의 공백을 띄우되 앞엔 공백이 없어야 한다, e.g. x: Int, and Circle: Shape.
+- 동일한 목적이나 맥락의 변수 등은 한 줄에 선언한다.
+- 게터와 세터 정의부나 속성 옵저버(observer) 들여쓰기.
+- internal 과 같은 기본 속성은 굳이 붙여주지 않는다. 비슷하게 오버라이드한 함수의 접근 제어자(access modifier)를 반복해서 적지 않는다.
+- 부가적인 기능은 익스텐션에 따로 빼서 구성한다(e.g. printing)
+- centerString 처럼 공유될 필요가 없는 세부 구현부는 익스텐션에 프라이빗(private access control)으로 구현한다.
 
+<a name="use_of_self"/>
 
+## Self의 사용(Use of Self)
+~~간결함을 위해, 함수나 변수에 접근하 때 self 없이도 가능하다면 self는 생략한다.~~
+ 
+~~self는 컴파일러단에서 필수적일 때만 사용한다(@escaping 클로저(closures)안 혹은 초기화 함수 내에서 속성과 인자의 명확한 구분을 위해). 즉 없이써도 컴파일 에러가 없다면 생략한다.~~
+ 
+->
+- 변수명이 짧거나 일반적인 단어라 변수 외의 용도로 사용 가능성이 높을 경우, 코드의 추적을 위해 변수를 검색할 때 어려울 수 있다.
+- 안드로이드에서 멤버 변수 앞엔 mVar식으로 m-을 앞에 붙이는 네이밍처럼, self.- 를 붙여서 사용하면 멤버 변수임을 시각적으로 더 잘알 수 있다.
 
+<a name="protocol_conformance"/>
+
+## 프로토콜 적용(Protocol Conformance)
+간결함을 위해, 연산 속성(computed property)이 read-only일 땐 get 구문을 제거한다. get 구문은 set 구문이 함께 있을 때만 필수적이다.
+
+#### Preferred:
+``` swift
+var diameter: Double {
+  return radius * 2
+}
+```
+#### Not Preferred:
+``` swift
+var diameter: Double {
+  get {
+    return radius * 2
+  }
+}
+```
+
+<a name="final"/>
+
+## 파이널(Final)
+클래스나 멤버를 파이널(final)로 만드는 것은 튜토리얼에서 전달하려는 핵심을 분산시킬 수 있고 필수적이지 않다. 그럼에도 불구하고 파이널을 사용하는 것이 가끔은 구현 의도를 명확하 할 수 있고 투자할 가치가 있는 작업이다. 아래 예제에서, Box는 특정한 목적으로 만든 것이므로 상속한 클래스를 바꿔서 사용하는 것을 막아야 한다. 파이널을 사용할 경우 이런 용도를 명확하게 할 수 있다.
+Marking classes or members as final in tutorials can distract from the main topic and is not required. Nevertheless, use of final can sometimes clarify your intent and is worth the cost. In the below example, Box has a particular purpose and customization in a derived class is not intended. Marking it final makes that clear.
+
+``` swift
+// Turn any generic type into a reference type using this Box class.
+final class Box<T> {
+  let value: T
+  init(_ value: T) {
+    self.value = value
+  }
+}
+```
 

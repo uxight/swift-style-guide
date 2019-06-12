@@ -25,7 +25,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   - [프로토콜 적용(Protocol Conformance)](#protocol_conformance)
   - [필요없는 코드(Unused Code)](#unused_code)
   - [import 최소화(Minimal Imports)](#minimal_imports)
-- [빈공간(Spacing)](#spacing)
+- [공백(Spacing)](#spacing)
 - [주석(Comments)](#comments)
 - [클래스와 스트럭트(Classes and Structures)](#classes_and_structures)
   - [Self의 사용(Use of Self)](#use_of_self)
@@ -52,12 +52,10 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   - [Guard의 단점(Failing Guards)](#failing_guards)
 - [세미콜론(Semicolons)](#semicolons)
 - [괄호(Parentheses)](#parentheses)
-- Multi-line String Literals
-- No Emoji
+- [여러 줄의 문자열 리터럴(Multi-line String Literals)](#multi-line_string_literals)
+- [이모지 금지(No Emoji)](#no_emoji)
 - Organization and Bundle Identifier
 - Copyright Statement
-- Smiley Face
-- References
 
 
 <a name="correctness"/>
@@ -414,10 +412,11 @@ var deviceModels: [String]
 
 <a name="spacing"/>
 
-## 빈공간(Spacing)
+## 공백(Spacing)
 - ~~들여쓰기를 탭보다는 스페이스 2번으로 하고, Xcode 프로젝트 설정에서 탭과 들여쓰기를 2개의 스페이스로 설정하라~~ -> 굳이 기본 설정 값을 바꾸지 않는다
-- if/else/switch/while 등의 { 괄호는 항상 같은 줄에서 시작하고 닫는 괄호(})는 새로운 줄에 해준다.
+- if/else/switch/while 등의 `{` 괄호는 항상 같은 줄에서 시작하고 닫는 괄호(`}`)는 새로운 줄에 해준다.
 - Tip: 특정 코드를 선택(혹은 커맨드+A로 전체 선택)하고 컨트롤+I(혹은 메뉴에서 Editor ▸ Structure ▸ Re-Indent)를 눌러 들여쓰기를 자동으로 재적용 시킬 수 있다. 
+> if/else/switch/while 등의 구문 다음의 조건절이나 괄호(`(` 혹은 `{`) 사이는 띄어쓰기로 구분해 준다
 
 #### Preferred:
 ``` swift
@@ -435,6 +434,20 @@ if user.isHappy
 }
 else {
   // Do something else
+}
+```
+
+> [구글 문서의 Horizontal Whitespace](https://google.github.io/swift/#horizontal-whitespace)부분 예시 추가. 
+#### Preferred:
+``` swift
+if (x == 0 && y == 0) || z == 0 {
+  // ...
+}
+```
+#### Not Preferred:
+``` swift
+if(x == 0 && y == 0) || z == 0 {
+  // ...
 }
 ```
 
@@ -1152,4 +1165,44 @@ if (name == "Hello") {
 ``` swift
 let playerMark = (player == current ? "X" : "O")
 ```
+
+<a name="multi-line_string_literals"/>
+
+## 여러 줄의 문자열 리터럴(Multi-line String Literals)
+긴 문자열 리터럴을 만들 땐 여러 줄의 문자열 리터럴 문법을 사용한다. 할당하는 라인에 리터럴을 열고 다음 줄부터 텍스트를 들여쓰기 후 입력한다.
+
+#### Preferred:
+``` swift
+let message = """
+  You cannot charge the flux \
+  capacitor with a 9V battery.
+  You must use a super-charger \
+  which costs 10 credits. You currently \
+  have \(credits) credits available.
+  """
+```
+#### Not Preferred:
+``` swift
+let message = """You cannot charge the flux \
+  capacitor with a 9V battery.
+  You must use a super-charger \
+  which costs 10 credits. You currently \
+  have \(credits) credits available.
+  """
+```
+#### Not Preferred:
+``` swift
+let message = "You cannot charge the flux " +
+  "capacitor with a 9V battery.\n" +
+  "You must use a super-charger " +
+  "which costs 10 credits. You currently " +
+  "have \(credits) credits available."
+```
+
+<a name="no_emoji"/>
+
+## 이모지 금지(No Emoji)
+이모지를 프로젝트에 사용하지 않는다. 협업자가 코드를 읽는데 불필요한 마찰의 근원이 된다. 귀엽지만 코드를 학습하거나 읽는데 방해가 된다.rs.
+
+
 

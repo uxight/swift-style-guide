@@ -1201,7 +1201,7 @@ let message = "You cannot charge the flux " +
 <a name="no_emoji"/>
 
 ## 이모지 금지(No Emoji)
-이모지를 프로젝트에 사용하지 않는다. 협업자가 코드를 읽는데 불필요한 마찰의 근원이 된다. 귀엽지만 코드를 학습하거나 읽는데 방해가 된다.rs.
+이모지를 프로젝트에 사용하지 않는다. 협업자가 코드를 읽는데 불필요한 마찰의 근원이 된다. 귀엽지만 코드를 학습하거나 읽는데 방해가 된다.
 
 <a name="copyright_statement"/>
 

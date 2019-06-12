@@ -39,19 +39,19 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
   - [상수(Constants)](#constants)
   - [스태틱 함수와 타입 속성 변수(Static Methods and Variable Type Properties)](#static_methods_and_variable_type_properties)
   - [옵셔널(Optionals)](#optionals)
-  - Lazy Initialization
-  - Type Inference
-  - Syntactic Sugar
-- Functions vs Methods
-- Memory Management
-  - Extending Lifetime
-- Access Control
-- Control Flow
-  - Ternary Operator
-- Golden Path
-  - Failing Guards
-- Semicolons
-- Parentheses
+  - [Lazy 초기화(Lazy Initialization)](#lazy_initialization)
+  - [타입 추론(Type Inference)](#type_inference)
+  - [문법적 편의(Syntactic Sugar)](#syntactic_sugar)
+- [함수 vs 메소드(Functions vs Methods)](#functions_vs_methods)
+- [메모리 관리(Memory Management)](#memory_management)
+  - [객체 주기 설정(Extending object lifetime)](#extending_object_lifetime)
+- [접근 제어(Access Control)](#access_control)
+- [흐름 제어(Control Flow)](#control_flow)
+  - [삼항 연산자(Ternary Operator)](#ternary_operator)
+- [최적의 코드 배치(Golden Path)](#golden_path)
+  - [Guard의 단점(Failing Guards)](#failing_guards)
+- [세미콜론(Semicolons)](#semicolons)
+- [괄호(Parentheses)](#parentheses)
 - Multi-line String Literals
 - No Emoji
 - Organization and Bundle Identifier
@@ -752,7 +752,7 @@ enum Math {
 
 let hypotenuse = side * Math.root2 // 여러 루트 중, 수학의 루트 한가지 뜻으로만 해석한다.
 ```
-*Note:* case 없이 사용하는 enum 을 상수를 모아두는 타입명(네임스페이스)으로 쓸 경우, 클래스나 스트럭트 등을 썼을 때 처럼 초기화하거나해서 다른 용도로 잘못 사용될 여지가 없어 순수하게 변수만을 담는 용도라고 이해하기 쉽다.
+**Note:** case 없이 사용하는 enum 을 상수를 모아두는 타입명(네임스페이스)으로 쓸 경우, 클래스나 스트럭트 등을 썼을 때 처럼 초기화하거나해서 다른 용도로 잘못 사용될 여지가 없어 순수하게 변수만을 담는 용도라고 이해하기 쉽다.
 #### Not Preferred:
 ``` swift
 let e = 2.718281828459045235360287  // global namespace가 난잡해진다.
@@ -846,7 +846,8 @@ private func makeLocationManager() -> CLLocationManager {
 <a name="type_inference"/>
 
 ### 타입 인터페이스(Type Inference)
-Prefer compact code and let the compiler infer the type for constants or variables of single instances. Type inference is also appropriate for small, non-empty arrays and dictionaries. When required, specify the specific type such as `CGFloat` or `Int16`.
+~~컴파일러가 변수나 상수의 타입을 추론할 수 있다면 코드를 간결하게 한다. 타입 추론(Type inference)은 작고 빈 배열, 딕셔너리에도 적합하다. 필요하다면 `CGFloat` 나 `Int16` 은 써준다.~~
+> 멤버 변수를 선언할 땐, 일관성 있고 가독성이 좋게 타입을 항상 명시해주기로 정했다.
 
 #### Preferred:
 ``` swift
@@ -862,7 +863,8 @@ let currentBounds: CGRect = computeViewBounds()
 var names = [String]()
 ```
 
-#### Type Annotation for Empty Arrays and Dictionaries
+#### 빈 배열과 딕셔너리를 위한 타입 주석(Type Annotation)
+빈 배열과 딕셔너리는 타입 주석을 사용한다. (크고 여러줄의 리터럴이 들어가는 배열이나 딕셔너리엔 타입 주석을 사용한다.)
 For empty arrays and dictionaries, use type annotation. (For an array or dictionary assigned to a large, multi-line literal, use type annotation.)
 #### Preferred:
 ``` swift
@@ -874,4 +876,280 @@ var lookup: [String: Int] = [:]
 var names = [String]()
 var lookup = [String: Int]()
 ```
-*NOTE:* Following this guideline means picking descriptive names is even more important than before.
+**NOTE:** 이 가이드라인을 따를 경우 설명적인 네이밍이 더 중요해진다.
+
+<a name="syntactic_sugar"/>
+
+### 문법적 편의(Syntactic Sugar)
+긴 문법보다는 짧은 버전을 선호한다.
+
+#### Preferred:
+``` swift
+var deviceModels: [String]
+var employees: [Int: String]
+var faxNumber: Int?
+```
+#### Not Preferred:
+``` swift
+var deviceModels: Array<String>
+var employees: Dictionary<Int, String>
+var faxNumber: Optional<Int>
+```
+
+<a name="functions_vs_methods"/>
+
+## 함수 vs 메소드(Functions vs Methods)
+클래스나 타입에 속해있지 않은 함수(Free function)는 최대한 쓰지 않으려고 한다. 가능하면 가독성이 높아지고 추적하 쉽도록 메소드(method)가 소속될 곳을 정한다.
+ 
+특정 타입이나 인스턴스와 연관성이 전혀 없는 경우에만 Free function 을 사용한다.
+
+#### Preferred:
+``` swift
+let sorted = items.mergeSorted()  // easily discoverable
+rocket.launch()  // acts on the model
+```
+#### Not Preferred:
+``` swift
+let sorted = mergeSort(items)  // hard to discover
+launch(&rocket)
+```
+#### Free Function Exceptions:
+``` swift
+let tuples = zip(a, b)  // feels natural as a free function (symmetry)
+let value = max(x, y, z)  // another free function that feels natural
+```
+
+<a name="memory_management"/>
+
+## 메모리 관리(Memory Management)
+실제 프로젝트 아니라 데모 코드일지라도 순환 참조를 만들지 않는다. 객체 그래프를 분석하고 `weak` and `unowned` 참조로 강한 순환 참조를 방지한다. 또는 밸류타입(`struct`, `enum`)을 사용하여 순환 참조를 방지하는 방법도 있다.
+Code (even non-production, tutorial demo code) should not create reference cycles. Analyze your object graph and prevent strong cycles with `weak` and `unowned` references. Alternatively, use value types (`struct`, `enum`) to prevent cycles altogether.
+
+<a name="extending_object_lifetime"/>
+
+### 객체 주기 설정(Extending object lifetime)
+`[weak self]` 와 `guard let self = self else { return }` 구문을 사용해 객체 주기를 설정한다. `self` 가 클로저 바깥에서 해제될 수도 있는 경우엔 `[unowned self]` 보다 `[weak self]` 를 선호한다. 옵셔널 체이닝은 지양한다. 
+Explicitly extending lifetime is preferred to optional chaining.
+
+#### Preferred:
+``` swift
+resource.request().onComplete { [weak self] response in
+  guard let self = self else {
+    return
+  }
+  let model = self.updateModel(response)
+  self.updateUI(model)
+}
+```
+#### Not Preferred:
+``` swift
+// 응답이 오는 시점에 self 가 이미 해제 되어 있다면 crash 가 난다
+resource.request().onComplete { [unowned self] response in
+  let model = self.updateModel(response)
+  self.updateUI(model)
+}
+```
+#### Not Preferred:
+``` swift
+// model 업데이트와 UI 업데이트 사이에 해제될 수 있음
+resource.request().onComplete { [weak self] response in
+  let model = self?.updateModel(response)
+  self?.updateUI(model)
+}
+```
+
+<a name="access_control"/>
+
+## 접근 제어(Access Control)
+전체 접근 가능한 annotation(Full access control annotation)은 튜토리얼에서 전달하려는 주제를 분산시킬 수 있고 필수적이지도 않다. `private` 과 `fileprivate` 을 적절하게 사용해 명확하게 하고 캡슐화(encapsulation)를 하기 좋다. `fileprivate` 보다는 `private` 을 선호하고 `fileprivate` 은 컴파일러가 제안할 때만 쓴다.
+ 
+`open`, `public`, `internal` 은 전체 접근 권한이 필요할 때 명시적으로 사용한다.
+
+접근 제어는 속성을 지정할 때 맨 앞에 쓰고 이것볻 앞에 쓸 수 있는 속성은 `static` 이나 `@IBAction`, `@IBOutlet`, `@discardableResult` 뿐이다.
+
+#### Preferred:
+``` swift
+private let message = "Great Scott!"
+
+class TimeMachine {  
+  private dynamic lazy var fluxCapacitor = FluxCapacitor()
+}
+```
+#### Not Preferred:
+``` swift
+fileprivate let message = "Great Scott!"
+
+class TimeMachine {  
+  lazy dynamic private var fluxCapacitor = FluxCapacitor()
+}
+```
+
+<a name="control_flow"/>
+
+## 흐름 제어(Control Flow)
+`for` 문에서 `while-condition-increment` 보다 `for-in` 스타일을 선호한다.
+
+#### Preferred:
+``` swift
+for _ in 0..<3 {
+  print("Hello three times")
+}
+
+for (index, person) in attendeeList.enumerated() {
+  print("\(person) is at position #\(index)")
+}
+
+for index in stride(from: 0, to: items.count, by: 2) {
+  print(index)
+}
+
+for index in (0...3).reversed() {
+  print(index)
+}
+```
+#### Not Preferred:
+``` swift
+var i = 0
+while i < 3 {
+  print("Hello three times")
+  i += 1
+}
+
+
+var i = 0
+while i < attendeeList.count {
+  let person = attendeeList[i]
+  print("\(person) is at position #\(i)")
+  i += 1
+}
+```
+
+<a name="ternary_operator"/>
+
+### 삼항 연산자(Ternary Operator)
+삼항연산자 `?:` 는 코드를 명확하게 하거나 깔끔하게 만들어주는 경우에만 사용한다. 보통 여러 조건의 분기가 들어가는 경우엔 `if` 문이나 인스턴스 변수로 따로 빼서 리팩토링하는 것이 더 이해하기 쉽다. 일반적으로 어떤 값을 사용할지 결정하고 변수를 할당하는 경우가 삼항 연산자 사용에 가장 적합하다.
+
+#### Preferred:
+``` swift
+let value = 5
+result = value != 0 ? x : y
+
+let isHorizontal = true
+result = isHorizontal ? x : y
+```
+#### Not Preferred:
+``` swift
+result = a > b ? x = c > d ? c : d : y
+```
+
+<a name="golden_path"/>
+
+## 최적의 코드 배치(Golden Path)
+조건문으로 코딩할 때 코드의 왼쪽 여백이 복잡하게 중첩된 울퉁불퉁한 공간을 만들지 않도록 한다. `if` 문을 중첩하지 않는다. 여러개의 return 구문은 괜찮다. `guard` 문은 이런 경우를 위해 만들어졌다.
+
+#### Preferred:
+``` swift
+func computeFFT(context: Context?, inputData: InputData?) throws -> Frequencies {
+
+  guard let context = context else {
+    throw FFTError.noContext
+  }
+  guard let inputData = inputData else {
+    throw FFTError.noInputData
+  }
+
+  // use context and input to compute the frequencies
+  return frequencies
+}
+```
+#### Not Preferred:
+``` swift
+func computeFFT(context: Context?, inputData: InputData?) throws -> Frequencies {
+
+  if let context = context {
+    if let inputData = inputData {
+      // use context and input to compute the frequencies
+
+      return frequencies
+    } else {
+      throw FFTError.noInputData
+    }
+  } else {
+    throw FFTError.noContext
+  }
+}
+```
+여러개의 옵셔널을 `guard` 나 `if let` 을 사용해 언랩(unwrapped)할 때 구문의 중첩 사용을 최소화하고 변수 사이에 `,` 를 사용해 하나의 구문안에서 해결한다. 이 때, `guard` 다음 변수(혹은 조건)을 선언할 땐 새로운 줄에 들여쓰기를 한 후 시작하고 `else` 는 다음 줄에 새로 적는다. 예제:
+#### Preferred:
+``` swift
+guard 
+  let number1 = number1,
+  let number2 = number2,
+  let number3 = number3 
+  else {
+    fatalError("impossible")
+}
+// do something with numbers
+```
+#### Not Preferred:
+``` swift
+if let number1 = number1 {
+  if let number2 = number2 {
+    if let number3 = number3 {
+      // do something with numbers
+    } else {
+      fatalError("impossible")
+    }
+  } else {
+    fatalError("impossible")
+  }
+} else {
+  fatalError("impossible")
+}
+```
+
+<a name="failing_guards"/>
+
+### Guard의 단점(Failing Guards)
+`Guard` 구문은 로직을 타지 않고 중간에 끝내야할 때 사용된다. 일반적으로 `return`, `throw`, `break`, `continue`, `fatalError()` 처럼 한 줄로 되어야 하며 길고 복잡한 코드는 피해야 한다. 만약 여러개의 탈출 코드가 있고 중복되는 코드들이 생기는 경우라면 깔끔한 코드를 위해 `defer` 사용을 고려한다
+
+<a name="semicolons"/>
+
+## 세미콜론(Semicolons)
+스위프트는 코드가 끝나는 지점을 구분하기 위해 세미콜론이 필요하지 않다. 세미콜론은 한 줄에 여러개의 (수행을 하는) 코드를 적고 싶을 때만 사용한다.
+  
+세미콜론을 사용하여 여러개의 코드를 한 줄에 적지 않는다.
+
+#### Preferred:
+``` swift
+let swift = "not a scripting language"
+```
+#### Not Preferred:
+``` swift
+let swift = "not a scripting language";
+```
+**NOTE:** 스위프트는 세미콜론이 없으면 안전하지 않다고 생각하는 자바스크립트와 다르다.
+
+<a name="parentheses"/>
+
+## 괄호(Parentheses)
+괄호를 조건문 양 옆에 붙일 필요 없으므로 사용하지 않는다.
+
+#### Preferred:
+``` swift
+if name == "Hello" {
+  print("World")
+}
+```
+#### Not Preferred:
+``` swift
+if (name == "Hello") {
+  print("World")
+}
+```
+표현이 길어질 경우 괄호는 때때로 코드를 더 명확하고 읽기 쉽게 해준다.
+#### Preferred:
+``` swift
+let playerMark = (player == current ? "X" : "O")
+```
+

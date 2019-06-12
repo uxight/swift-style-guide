@@ -275,7 +275,7 @@ let view = UIView(frame: CGRect.zero)
 <a name="generics"/>
 
 ### 제너릭(Generics)
-제너릭 타입은 설명적이고 upper camel case 형태여야 한다. 관련된 뜻이나 역할이 없을 경우 T, U, V 등의 대문자 한글자로 쓴다.
+제너릭 타입은 설명적이고 upper camel case 형태여야 한다. 관련된 뜻이나 역할이 없을 경우 `T`, `U`, `V` 등의 대문자 한글자로 쓴다.
 
 #### Preferred:
 ``` swift

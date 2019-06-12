@@ -35,8 +35,8 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 - [함수 선언(Function Declarations)](#function_declarations)
 - [함수 사용(Function Calls)](#function_calls)
 - [클로저 표현(Closure Expressions)](#closure_expressions)
-- Types
-  - Constants
+- [타입(Types)](#types)
+  - [상수(Constants)](#constants)
   - Static Methods and Variable Type Properties
   - Optionals
   - Lazy Initialization
@@ -672,7 +672,7 @@ let success = reticulateSplines(
 
 ## 클로저 표현(Closure Expressions)
 ~~마지막 클로저 인자 축약 표현(trailing closure syntax)은 인자가 하나일 때만 사용한다.~~ 클로저 인자의 성격을 파악하 쉽게 인자 이름을 모두 붙인다.
-> 생소한 함수이거나, 애플의 API 가 아니고 사용자가 만든 함수일 경우 다른 사람이 읽을 땐 인자의 성격에 대한 파악이 힘들 수 있다. 마지막 클로저 인자 축약 표현(trailing closure syntax)은 최대한 지양한다.
+> 생소한 함수이거나, 애플의 API 가 아니고 사용자가 만든 함수일 경우 다른 사람이 읽을 땐 인자의 성격에 대한 파악이 힘들 수 있다. 마지막 클로저 인자 축약 표현(trailing closure syntax)은 최대한 지양하기로 했다.
 
 #### Preferred:
 ``` swift
@@ -713,3 +713,33 @@ let value = numbers.map({ $0 * 2 })    ( O )
 let value = numbers.map({$0 * 2})      ( X )
 ```
 
+<a name="types"/>
+
+## 타입(Types)
+스위프트(swift)는 오브젝티브씨(Objective-C) 브릿징을 제공해 여전히 사용할 수 있지만 최대한 스위프트 타입과 표현을 그대로 사용한다.
+
+#### Preferred:
+``` swift
+let width = 120.0                                    // Double
+let widthString = "\(width)"                         // String
+```
+#### Less Preferred:
+``` swift
+let width = 120.0                                    // Double
+let widthString = (width as NSNumber).stringValue    // String
+```
+#### Not Preferred:
+``` swift
+let width: NSNumber = 120.0                          // NSNumber
+let widthString: NSString = width.stringValue        // NSString
+```
+드로잉 코드같은 경우, `CGFloat`을 사용하면 많은 변환을 안하고 간결하게 쓸 수 있다.
+
+<a name="constants"/>
+
+## 상수(Constants)
+Constants are defined using the let keyword and variables with the var keyword. Always use let instead of var if the value of the variable will not change.
+
+Tip: A good technique is to define everything using let and only change it to var if the compiler complains!
+
+You can define constants on a type rather than on an instance of that type using type properties. To declare a type property as a constant simply use static let. Type properties declared in this way are generally preferred over global constants because they are easier to distinguish from instance properties. Example:

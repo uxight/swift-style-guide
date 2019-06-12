@@ -37,8 +37,8 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 - [클로저 표현(Closure Expressions)](#closure_expressions)
 - [타입(Types)](#types)
   - [상수(Constants)](#constants)
-  - Static Methods and Variable Type Properties
-  - Optionals
+  - [스태틱 함수와 타입 속성 변수(Static Methods and Variable Type Properties)](#static_methods_and_variable_type_properties)
+  - [옵셔널(Optionals)](#optionals)
   - Lazy Initialization
   - Type Inference
   - Syntactic Sugar
@@ -737,9 +737,141 @@ let widthString: NSString = width.stringValue        // NSString
 
 <a name="constants"/>
 
-## 상수(Constants)
-Constants are defined using the let keyword and variables with the var keyword. Always use let instead of var if the value of the variable will not change.
+### 상수(Constants)
+상수는 let 으로 선언하고 변수는 var 을 쓴다. 변수의 값이 변경되지 않는다면 무조건 let 을 쓴다.
+ 
+Tip: 컴파일 에러가 날 때만 var 을 쓰고 나머지는 모두 let 을 쓰면 쉽다.
+ 
+타입 내에서 static let 을 사용해 타입 속성으로 상수를 선언할 수 있다. 이렇게 선언할 경우 글로벌 상수로 선언했을 때보다 인스턴트 속성과 쉽게 구별된다.
+#### Preferred:
+``` swift
+enum Math {
+  static let e = 2.718281828459045235360287
+  static let root2 = 1.41421356237309504880168872
+}
 
-Tip: A good technique is to define everything using let and only change it to var if the compiler complains!
+let hypotenuse = side * Math.root2 // 여러 루트 중, 수학의 루트 한가지 뜻으로만 해석한다.
+```
+*Note:* case 없이 사용하는 enum 을 상수를 모아두는 타입명(네임스페이스)으로 쓸 경우, 클래스나 스트럭트 등을 썼을 때 처럼 초기화하거나해서 다른 용도로 잘못 사용될 여지가 없어 순수하게 변수만을 담는 용도라고 이해하기 쉽다.
+#### Not Preferred:
+``` swift
+let e = 2.718281828459045235360287  // global namespace가 난잡해진다.
+let root2 = 1.41421356237309504880168872
 
-You can define constants on a type rather than on an instance of that type using type properties. To declare a type property as a constant simply use static let. Type properties declared in this way are generally preferred over global constants because they are easier to distinguish from instance properties. Example:
+let hypotenuse = side * root2 // root2가 뭘 의미하는지 명확하지 않다.
+```
+
+<a name="static_methods_and_variable_type_properties"/>
+
+### 스태틱 함수와 타입 속성 변수(Static Methods and Variable Type Properties)
+스태틱 함수와 타입 속성 역시 글로벌 함수, 변수와 비슷하게 꼭 필요할 때만 쓴다. 기능적으로 특정 타입 범위내에서 적용한다던가 오브젝티브씨와 호환되어야할 때 유용하다.
+
+<a name="optionals"/>
+
+### 옵셔널(Optionals)
+변수와 함수의 리턴 타입이 `nil` 이 될 수 있다면 옵셔널 `?` 로 선언한다.
+ 
+`!` 를 사용해 강제 언랩하는(implicitly unwrapped) 형태는 확실할 때만 사용한다. ~~`viewDidLoad` 에서 할당시키는 서브뷰들처럼 사용 전에 할당되는 것이 확실한 경우를 제외하고 나머지는 옵셔널 바인딩(optional binding)을 사용해 안전하게 쓴다.~~
+> 애초에 개발자는 에러가 나지 않을 것이라고 판단하고 코딩하지만 에러가 나는 것처럼, 사용 전에 할당될 것이 확실하다는 판단은 자의적이다. IBOutlet 처럼 기본이 아니라면 최대한 사용하 않는다.
+ 
+옵셔널 밸류에 접근할 때 단 한번만 사용하거나 옵셔널이 중첩되어 있다면 옵셔널 체이닝(optional chaining)을 사용한다:
+``` swift
+textContainer?.textLabel?.setNeedsDisplay()
+```
+
+옵셔널을 벗긴(unwrap) 후 여러번 사용해야 한다면 옵셔널 바인딩을 사용하는 것이 편리하다:
+``` swift
+if let textContainer = textContainer {
+  // do many things with textContainer
+}
+```
+
+옵셔널 변수나 속성은 타입에서 이미 명시 돼 있으므로 네이밍할 때 `optionalString` 혹은 `maybeView` 식으로 이름에 뜻을 내포시키지 않는다.
+ 
+옵셔널 바인딩 할 땐 `unwrappedView` 혹은 `actualLabel` 같은 변수명으로 받기보단 원래의 이름 그대로 받는다.
+
+#### Preferred:
+``` swift
+var subview: UIView?
+var volume: Double?
+
+// later on...
+if let subview = subview, let volume = volume {
+  // do something with unwrapped subview and volume
+}
+
+// another example
+UIView.animate(withDuration: 2.0) { [weak self] in
+  guard let self = self else { return }
+  self.alpha = 1.0
+}
+```
+#### Not Preferred:
+``` swift
+var optionalSubview: UIView?
+var volume: Double?
+
+if let unwrappedSubview = optionalSubview {
+  if let realVolume = volume {
+    // do something with unwrappedSubview and realVolume
+  }
+}
+
+// another example
+UIView.animate(withDuration: 2.0) { [weak self] in
+  guard let strongSelf = self else { return }
+  strongSelf.alpha = 1.0
+}
+```
+
+<a name="lazy_initialization"/>
+
+### Lazy 초기화(Lazy Initialization)
+객체에 특정한 주기 설계가 필요한 경우 lazy 초기화를 사용한다. 특히 `UIViewController` 에서 뷰들을 lazy 하게 로드할 때 좋다. 호출 시 수행하는 `{ }()` 와 같은 클로저를 사용하거나 private 생성 함수(factory method)를 사용한다. 예:
+``` swift
+lazy var locationManager = makeLocationManager()
+
+private func makeLocationManager() -> CLLocationManager {
+  let manager = CLLocationManager()
+  manager.desiredAccuracy = kCLLocationAccuracyBest
+  manager.delegate = self
+  manager.requestAlwaysAuthorization()
+  return manager
+}
+```
+#### Notes:
+- `[unowned self]` 는 여기서 필요하지 않음. 리테인 사이클이 생성되지 않음.
+- 위의 Location manager 같은 경우 위치 사용 권한을 사용자에게 묻는 팝업이 뜨므로 이런 경우엔 lazy를 사용해 시점을 조정하면 좋다.
+
+<a name="type_inference"/>
+
+### 타입 인터페이스(Type Inference)
+Prefer compact code and let the compiler infer the type for constants or variables of single instances. Type inference is also appropriate for small, non-empty arrays and dictionaries. When required, specify the specific type such as `CGFloat` or `Int16`.
+
+#### Preferred:
+``` swift
+let message = "Click the button"
+let currentBounds = computeViewBounds()
+var names = ["Mic", "Sam", "Christine"]
+let maximumWidth: CGFloat = 106.5
+```
+#### Not Preferred:
+``` swift
+let message: String = "Click the button"
+let currentBounds: CGRect = computeViewBounds()
+var names = [String]()
+```
+
+#### Type Annotation for Empty Arrays and Dictionaries
+For empty arrays and dictionaries, use type annotation. (For an array or dictionary assigned to a large, multi-line literal, use type annotation.)
+#### Preferred:
+``` swift
+var names: [String] = []
+var lookup: [String: Int] = [:]
+```
+#### Not Preferred:
+``` swift
+var names = [String]()
+var lookup = [String: Int]()
+```
+*NOTE:* Following this guideline means picking descriptive names is even more important than before.

@@ -56,6 +56,13 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 - [이모지 금지(No Emoji)](#no_emoji)
 - [Copyright Statement](#copyright_statement)
 
+- [코딩 규칙](#coding_rule)
+  - [페이지 전환, 데이터 전달(segue)](#page_injection)
+  - [뷰와 컨트롤러의 분리](#separate_view_and_controller)
+  - [네이밍](#naming_rule)
+  - [closure(block) VS protocol](#closure_vs_protocol)
+ 
+
 
 <a name="correctness"/>
 
@@ -1208,4 +1215,93 @@ let message = "You cannot charge the flux " +
 
 ## Copyright Statement
 [raywenderlich 문서의 Copyright](https://github.com/raywenderlich/swift-style-guide#copyright-statement) 확인
+
+
+<a name="coding_rule"/>
+
+## 코딩 규칙
+
+<a name="page_injection"/>
+
+### 페이지 전환, 데이터 전달(segue)
+extension 으로 뷰컨트롤러의 생성자를 클래스 위에 따로 빼서 정의하고, 뷰컨트롤러 생성과 페이지 전환 모두 코드로 처리한다. [자세한 내용 확인](https://medium.com/uxight/페이지-전환과-데이터-전달-3b67566022c0)
+``` swift
+extension EditProfilePage {
+    static func new(
+        name: String,
+        address: String,
+        age: Int,
+        onEditComplete: (_ name: String, _ address: String, _ age: Int)->Void
+        ) -> EditProfilePage {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let identifier = String(describing: EditProfilePage.self)
+        let page = storyboard.instantiateViewController(withIdentifier: identifier) as! EditProfilePage
+        page.name = name
+        page.address = address
+        page.age = age
+        page.onEditComplete = onEditComplete
+        return page
+    }
+}
+class EditProfilePage: UIViewController {
+    ...
+```
+
+<a name="separate_view_and_controller"/>
+
+### 뷰와 컨트롤러의 분리
+뷰는 컨트롤러와 최대한 분리하고 storyboard / xib 에만 넣으려고 노력한다. 코드로 UI 레이아웃을 짜지 않는다. 뷰와 관련된 작업은 `viewDidLoad()` 내의 `setUserInterface()` 함수내에 정의해서 뷰와 관련된 코드의 추적은 Interface builder 를 보거나 `setUserInterface()` 중 하나를 통해 무조건 추적 가능하도록 한다
+
+<a name="naming_rule"/>
+
+### 네이밍
+- IBOutlet 연결 객체나 UI 클래스들을 네이밍할 땐 앞에 접두어를 제거한 해당 클래스명을 풀로 붙이고 네이밍을 결합한다. 자동 완성 시 button을 칠 경우 버튼 관련 객체만 쭉 볼 수 있어서 원하는 코드를 찾기 쉽다.
+ 
+**(접두어제거)class + Naming**
+예시) UIButton일 경우 접두어 'UI' 제거 후 button+Name, 클릭(Touch Up Inside)은 click+Name:
+``` swift
+@IBAction func clickName(_ sender: Any)
+@IBOutlet weak var buttonName: UIButton! 
+@IBOutlet var constraintButtonWidth: NSLayoutConstraint!
+@IBOutlet weak var collectionViewPhotoAlbum: UICollectionView!
+```
+
+- 페이지 단위로 쓰이는 UIViewController 클래스의 네이밍
+ 
+**~ViewController -> ~Page**
+ 
+예) ProfileViewController -> ProfilePage
+: 해당 클래스는 거의 다 페이지 의미로 사용되며, ViewController 를 그대로 사용할 경우 이름이 너무 길어질 수 있다.
+
+- 팝업 역할을 하는 페이지 (생성자로 new() 대신 present(to:) 함수 사용)
+ 
+**~ViewController -> ~PopUp**
+ 
+예) SelectGenderPopUp
+: 네이밍을 보고 사용 방법(함수)을 추측할 수 있게끔 한다.
+ 
+**storyboard 내에 만들지 않고 xib로 따로 만든다.**
+: 여러 곳에서 중복해서 사용될 경우 Xib로 만든다.(스토리보드를 나눠서 만들 수 있는데 서로 다른 스토리보드에서 중복돼 사용될 경우 어떤 스토리보드에 속하게 할지가 애매해질 수 있다)
+
+- 테이블뷰, 컬렉션뷰의 셀
+ 
+**~TableViewCell, ~CollectionViewCell -> ~Cell**
+**인젝션 시 func configure(with:indexPath:) 함수 사용**
+: 테이블뷰셀, 컬렉션뷰셀 구분이 필요한 경우가 많지 않고 클래스 이름이 너무 길어질 수 있다. 
+
+
+<a name="closure_vs_protocol"/>
+
+### closure(block) VS protocol
+- 해당 클래스 자체가 그 블럭을 통해 결과값을 얻기 위한 단일 목적으로 만들어진 경우엔 블럭을 쓴다. 
+ 
+함수의 호출이 원인이고 인자로 넘긴 블럭이 결과의 형식이고 중간 과정의 코드를 추적할 필요가 없거나 중간과정 부터의 코드 추적이 일어나지 않는 경우
+예시:
+``` swift
+SelectGenderPopUp.present(didSelect: { selectedGender in
+     self.reloadUserInfo(withGender: selectedGender)
+})
+```
+
+[자세한 내용 확인](https://medium.com/uxight/protocol-vs-closure-block-9331a7106f52)
 

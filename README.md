@@ -1258,7 +1258,7 @@ class EditProfilePage: UIViewController {
 ### 네이밍
 - IBOutlet 연결 객체나 UI 클래스들을 네이밍할 땐 앞에 접두어를 제거한 해당 클래스명을 풀로 붙이고 네이밍을 결합한다. 자동 완성 시 button을 칠 경우 버튼 관련 객체만 쭉 볼 수 있어서 원하는 코드를 찾기 쉽다.
  
-**(접두어제거)class + Naming**
+> **(접두어제거)class + Naming**
  
 예시) UIButton일 경우 접두어 'UI' 제거 후 button+Name, 클릭(Touch Up Inside)은 click+Name:
 ``` swift
@@ -1270,27 +1270,27 @@ class EditProfilePage: UIViewController {
 
 - 페이지 단위로 쓰이는 UIViewController 클래스의 네이밍
  
-**~ViewController -> ~Page**
+> **~ViewController -> ~Page**
  
 예) ProfileViewController -> ProfilePage
 : 해당 클래스는 거의 다 페이지 의미로 사용되며, ViewController 를 그대로 사용할 경우 이름이 너무 길어질 수 있다.
 
 - 팝업 역할을 하는 페이지 (생성자로 new() 대신 present(to:) 함수 사용)
  
-**~ViewController -> ~PopUp**
+> **~ViewController -> ~PopUp**
  
 예) SelectGenderPopUp
 : 네이밍을 보고 사용 방법(함수)을 추측할 수 있게끔 한다.
  
-**storyboard 내에 만들지 않고 xib로 따로 만든다.**
+> **storyboard 내에 만들지 않고 xib로 따로 만든다.**
  
 : 여러 곳에서 중복해서 사용될 경우 Xib로 만든다.(스토리보드를 나눠서 만들 수 있는데 서로 다른 스토리보드에서 중복돼 사용될 경우 어떤 스토리보드에 속하게 할지가 애매해질 수 있다)
 
 - 테이블뷰, 컬렉션뷰의 셀
  
-**~TableViewCell, ~CollectionViewCell -> ~Cell**
+> **~TableViewCell, ~CollectionViewCell -> ~Cell**
  
-**인젝션 시 func configure(with:indexPath:) 함수 사용**
+> **인젝션 시 func configure(with:indexPath:) 함수 사용**
 : 테이블뷰셀, 컬렉션뷰셀 구분이 필요한 경우가 많지 않고 클래스 이름이 너무 길어질 수 있다. 
 
 

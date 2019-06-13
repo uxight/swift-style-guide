@@ -55,7 +55,7 @@ iOS팀 내 협업을 위해 정의한 스위프트 코딩 스타일/규칙 문�
 - [여러 줄의 문자열 리터럴(Multi-line String Literals)](#multi-line_string_literals)
 - [이모지 금지(No Emoji)](#no_emoji)
 - [Copyright Statement](#copyright_statement)
-------------------------------------------------------------
+ 
 - [코딩 규칙](#coding_rule)
   - [페이지 전환, 데이터 전달(segue)](#page_injection)
   - [뷰와 컨트롤러의 분리](#separate_view_and_controller)

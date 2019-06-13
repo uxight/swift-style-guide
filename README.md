@@ -1248,13 +1248,15 @@ class EditProfilePage: UIViewController {
 ```
 [자세한 내용 확인](https://medium.com/uxight/페이지-전환과-데이터-전달-3b67566022c0)
  
+
 <a name="separate_view_and_controller"/>
 
 ### 뷰와 컨트롤러의 분리
 뷰는 컨트롤러와 최대한 분리하고 storyboard / xib 에만 넣으려고 노력한다. 코드로 UI 레이아웃을 짜지 않는다. 뷰와 관련된 작업은 `viewDidLoad()` 내의 `setUserInterface()` 함수내에 정의해서 뷰와 관련된 코드의 추적은 Interface builder 를 보거나 `setUserInterface()` 중 하나를 통해 무조건 추적 가능하도록 한다
+ 
 
 <a name="naming_rule"/>
- 
+
 ### 네이밍
 - IBOutlet 연결 객체나 UI 클래스들을 네이밍할 땐 앞에 접두어를 제거한 해당 클래스명을 풀로 붙이고 네이밍을 결합한다. 자동 완성 시 button을 칠 경우 버튼 관련 객체만 쭉 볼 수 있어서 원하는 코드를 찾기 쉽다.
  
@@ -1268,6 +1270,7 @@ class EditProfilePage: UIViewController {
 @IBOutlet weak var collectionViewPhotoAlbum: UICollectionView!
 ```
  
+
 - 페이지 단위로 쓰이는 UIViewController 클래스의 네이밍
  
 > **~ViewController -> ~Page**
@@ -1275,6 +1278,7 @@ class EditProfilePage: UIViewController {
 예) ProfileViewController -> ProfilePage
 : 해당 클래스는 거의 다 페이지 의미로 사용되며, ViewController 를 그대로 사용할 경우 이름이 너무 길어질 수 있다.
  
+
 - 팝업 역할을 하는 페이지 (생성자로 new() 대신 present(to:) 함수 사용)
  
 > **~ViewController -> ~PopUp**
@@ -1286,6 +1290,7 @@ class EditProfilePage: UIViewController {
  
 : 여러 곳에서 중복해서 사용될 경우 Xib로 만든다.(스토리보드를 나눠서 만들 수 있는데 서로 다른 스토리보드에서 중복돼 사용될 경우 어떤 스토리보드에 속하게 할지가 애매해질 수 있다)
  
+
 - 테이블뷰, 컬렉션뷰의 셀
  
 > **~TableViewCell, ~CollectionViewCell -> ~Cell**

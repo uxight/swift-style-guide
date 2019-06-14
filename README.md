@@ -348,7 +348,7 @@ class MyViewController: UIViewController, UITableViewDataSource, UIScrollViewDel
 자식 클래스(derived class)에서는 부모 클래스(base class)에서 이미 적용한 프로토콜을 다시 선언하고 적용시키는 것이 불가능하기 때문에, 
 부모 클래스의 그룹화된 익스텐션 코드들을 그대로 복사해 넣을 필요는 없다. 특히 자식 클래스가 터미널 클래스(terminal class)이고 오버라이드된 함수가 몇 개 없을 경우 더 그렇다. 언제 익스텐션 그룹들을 유지할지는 작성자의 재량에 달려있다.
 
-UIKit의 뷰컨틀롤러에선 라이프사이클(lifecycle), 커스텀 접근자(accessors), IBAction 을 따로 클래스 익스텐션에 그룹화하는 것을 고려한다.
+UIKit의 뷰컨틀롤러에선 라이프사이클(lifecycle), 커스텀 접근자(accessors), IBAction 을 익스텐션에 따로 그룹화하는 것을 고려한다.
 
 Since the compiler does not allow you to re-declare protocol conformance in a derived class, it is not always required to replicate the extension groups of the base class. This is especially true if the derived class is a terminal class and a small number of methods are being overridden. When to preserve the extension groups is left to the discretion of the author.
 
@@ -361,10 +361,6 @@ For UIKit view controllers, consider grouping lifecycle, custom accessors, and I
 엑스코드에서 기본 작성 돼 있는 코드, 주석들을 포함해 쓰지 않는 코드들은 지운다. 사용자에게 주석된 코드를 사용하도록 알려주는 튜토리얼은 예외다.
 
 튜토리얼과 상관없이 구현부에 단순히 부모 클래스(superclass)에 호출하는 코드만 있는 함수도 삭제한다. 사용하지 않거나 빈 UIApplicationDelegate 함수들도 마찬가지다.
- 
-Unused (dead) code, including Xcode template code and placeholder comments should be removed. An exception is when your tutorial or book instructs the user to use the commented code.
- 
-Aspirational methods not directly associated with the tutorial whose implementation simply calls the superclass should also be removed. This includes any empty/unused UIApplicationDelegate methods.
 
 #### Preferred:
 ``` swift
